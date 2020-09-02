@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#212121</color>
+    <color name="colorPrimaryDark">#3c4043</color>
+    <color name="colorAccent">#7D53C6</color>
+
+    <color name="toolbar_color">#3c4043</color>
+    <color name="background_color">#202125</color>
+
+    <!--color for text -->
+    <color name="color_primary_text">#FFFFFF</color>
+    <color name="color_secondary_text">#FDFDFD</color>
+
+    <!--color for divider -->
+    <color name="color_divider">#424242</color>
+
+    <!--color for button -->
+    <color name="gradient_start_color">#673AB7</color>
+    <color name="gradient_end_color">#7D53C6</color>
+    <color name="button_pressed">#7D53C6</color>
+
+    <!--color for navigation view-->
+    <color name="nav_view">#303030</color>
+    <color name="nav_view_footer">#535353</color>
+</resources>

@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
-    <color name="colorAccent">#03DAC5</color>
+    <color name="colorPrimary">#4c84FF</color>
+    <color name="colorPrimaryDark">#F0F0F0</color>
+    <color name="colorAccent">#18a3fe</color>
+
+    <color name="toolbar_color">#F0F0F0</color>
+    <color name="background_color">#ffffff</color>
+
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_black">#000000</color>
+
+    <!--color for text -->
+    <color name="color_primary_text">#000000</color>
+    <color name="color_secondary_text">#232323</color>
+
+    <!--color for divider -->
+    <color name="color_divider">#ECECEC</color>
+
+    <!--color for button -->
+    <color name="gradient_start_color">#4c84ff</color>
+    <color name="gradient_end_color">#18a3fe</color>
+    <color name="button_pressed">#18a3fe</color>
+
+    <!--color for navigation view-->
+    <color name="nav_view">#FDFDFD</color>
+    <color name="nav_view_footer">#D8D8D8</color>
+
 </resources>
