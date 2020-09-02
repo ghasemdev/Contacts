@@ -1,7 +1,8 @@
 <resources>
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">#AFAFAF</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -13,4 +14,5 @@
         <!--Background color when selected-->
         <item name="colorControlHighlight">@color/colorPrimaryDark</item>
     </style>
+
 </resources>
