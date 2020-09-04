@@ -4,8 +4,12 @@
     <color name="colorPrimaryDark">#3c4043</color>
     <color name="colorAccent">#7D53C6</color>
 
-    <color name="toolbar_color">#3c4043</color>
-    <color name="background_color">#202125</color>
+    <color name="background_color">#212121</color>
+    <color name="radius_color">#252525</color>
+    <color name="popup_color">#3d3d3d</color>
+
+    <!--color for icon-->
+    <color name="icon_color">#FFFFFFFF</color>
 
     <!--color for text -->
     <color name="color_primary_text">#FFFFFF</color>
