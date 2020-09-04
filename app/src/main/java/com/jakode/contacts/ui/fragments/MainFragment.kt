@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakode.contacts.R
@@ -80,10 +79,7 @@ class MainFragment : Fragment() {
         // Cover click listener
         binding.toolbarHeader.myCover.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToShowUserFragment()
-            val extras = FragmentNavigatorExtras( // Shared element animation
-                binding.toolbarHeader.myCover to "imageView"
-            )
-            findNavController().navigate(action, extras)
+            findNavController().navigate(action)
         }
 
         // Recent click listener

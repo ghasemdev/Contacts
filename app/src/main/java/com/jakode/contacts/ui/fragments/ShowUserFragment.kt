@@ -2,14 +2,11 @@ package com.jakode.contacts.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.transition.Fade
-import android.transition.TransitionInflater
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import com.jakode.contacts.R
 import com.jakode.contacts.databinding.FragmentShowUserBinding
 import com.jakode.contacts.utils.DrawerManager
 import com.jakode.contacts.utils.ImageSetter
@@ -25,18 +22,6 @@ class ShowUserFragment : Fragment() {
         } catch (e: ClassCastException) {
             throw ClassCastException("${activity.toString()} must implement DrawerLocker")
         }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        sharedElementAnim()
-    }
-
-    private fun sharedElementAnim() {
-        // Shared element anim
-        sharedElementEnterTransition =
-            TransitionInflater.from(context).inflateTransition(R.transition.change_bounds)
-        sharedElementReturnTransition = Fade()
     }
 
     override fun onCreateView(
