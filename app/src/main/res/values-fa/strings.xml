@@ -1,13 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Contacts</string>
-    <string name="add_user">Add User</string>
-    <string name="search">Search</string>
-    <string name="recent">Recents</string>
+    <string name="app_name">مخاطبین</string>
+    <string name="add_user">افزودن مخاطب</string>
+    <string name="search">جست و جو</string>
+    <string name="recent">اخیراً</string>
 
-    <string name="more">More</string>
-    <string name="delete">Delete</string>
-    <string name="share">Share</string>
-    <string name="view_all">View all</string>
+    <string name="more">بیشتر</string>
+    <string name="delete">حذف</string>
+    <string name="share">اشتراک گذاری</string>
+    <string name="view_all">مشاهده همه</string>
 
     <string name="frag">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
@@ -34,6 +35,5 @@
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    </string>
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.</string>
 </resources>
