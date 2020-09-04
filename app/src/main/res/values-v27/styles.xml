@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorPrimaryDark">@color/background_color</item>
         <item name="colorAccent">@color/colorAccent</item>
 
         <!-- API 23 (android 6)-->
@@ -14,6 +14,7 @@
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowActivityTransitions">true</item>
     </style>
 
 </resources>
