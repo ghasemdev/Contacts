@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.jakode.contacts.R
 import com.jakode.contacts.databinding.FragmentShowUserBinding
 import com.jakode.contacts.utils.DrawerManager
+import com.jakode.contacts.utils.ImageSetter
 
 class ShowUserFragment : Fragment() {
     private lateinit var binding: FragmentShowUserBinding
@@ -49,6 +50,11 @@ class ShowUserFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Init app bar image
+        ImageSetter.set(
+            "https://i.redd.it/hfdbbih4nou41.jpg",
+            binding.appBarImage
+        )
 
         // Back button
         binding.toolbar.setNavigationOnClickListener {

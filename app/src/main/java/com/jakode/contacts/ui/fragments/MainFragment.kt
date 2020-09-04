@@ -14,6 +14,7 @@ import com.jakode.contacts.data.model.Recent
 import com.jakode.contacts.data.model.User
 import com.jakode.contacts.databinding.FragmentMainBinding
 import com.jakode.contacts.utils.DrawerManager
+import com.jakode.contacts.utils.ImageSetter
 import com.jakode.contacts.utils.PopupMenu
 
 class MainFragment : Fragment() {
@@ -54,6 +55,11 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Init cover
+        ImageSetter.set(
+            "https://i.redd.it/hfdbbih4nou41.jpg",
+            binding.toolbarHeader.myCover
+        )
 
         // orientation and adapter
         val viewManager =
@@ -119,70 +125,70 @@ class MainFragment : Fragment() {
     private fun users() = arrayListOf(
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
         ),
         Recent(
             User(
-                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue"
             ), "1 hr ago"
