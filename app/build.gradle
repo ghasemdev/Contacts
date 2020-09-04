@@ -25,7 +25,7 @@ android {
         }
     }
 
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
 
@@ -69,7 +69,7 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
 
     // Rounded image
-    implementation 'de.hdodenhof:circleimageview:3.1.0'
+    implementation 'com.makeramen:roundedimageview:2.3.0'
 
     // Date Time Picker
     implementation 'ir.scriptestan.jalalimaterialdatetimepicker:library:0.1.2'
