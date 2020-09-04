@@ -7,7 +7,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakode.contacts.R
+import com.jakode.contacts.adapter.RecentAdapter
+import com.jakode.contacts.data.model.Recent
+import com.jakode.contacts.data.model.User
 import com.jakode.contacts.databinding.FragmentMainBinding
 import com.jakode.contacts.utils.DrawerManager
 import com.jakode.contacts.utils.PopupMenu
@@ -15,6 +19,7 @@ import com.jakode.contacts.utils.PopupMenu
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var drawerManager: DrawerManager
+    private lateinit var viewAdapter: RecentAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -49,6 +54,18 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // orientation and adapter
+        val viewManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        viewAdapter = RecentAdapter(users())
+
+        // Recycler view set setting
+        binding.toolbarHeader.recentList.apply {
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+
         // Init clickable
         clickListener()
     }
@@ -98,4 +115,77 @@ class MainFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    private fun users() = arrayListOf(
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        ),
+        Recent(
+            User(
+                "https://avatars3.githubusercontent.com/u/65798992?s=400&u=bfa1e1b2c65f62934c84f0591e0bc3d8e677bb48&v=4",
+                "Jack",
+                "Blue"
+            ), "1 hr ago"
+        )
+    )
 }

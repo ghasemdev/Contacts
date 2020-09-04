@@ -55,12 +55,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/recent" />
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_width="0dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recent_list"
+        android:layout_width="match_parent"
         android:layout_height="170dp"
         android:layout_marginTop="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@color/colorAccent"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
