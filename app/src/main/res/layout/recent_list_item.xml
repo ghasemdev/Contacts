@@ -19,13 +19,13 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
-            android:layout_width="115dp"
+            android:layout_width="125dp"
             android:layout_height="155dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="4dp"
             android:layout_marginBottom="5dp"
-            app:cardBackgroundColor="@color/background_color"
+            app:cardBackgroundColor="@color/nav_view"
             app:cardCornerRadius="10dp"
             app:cardElevation="4dp"
             app:cardUseCompatPadding="true"
@@ -35,11 +35,12 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/item_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
                 <ImageView
-                    android:id="@+id/more"
+                    android:id="@+id/item_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -51,7 +52,7 @@
                     tools:ignore="ContentDescription" />
 
                 <TextView
-                    android:id="@+id/first_name"
+                    android:id="@+id/item_first_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
@@ -60,11 +61,11 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/more"
+                    app:layout_constraintTop_toBottomOf="@+id/item_more"
                     tools:text="@string/jack" />
 
                 <TextView
-                    android:id="@+id/last_name"
+                    android:id="@+id/item_last_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/color_secondary_text"
@@ -72,28 +73,28 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/first_name"
+                    app:layout_constraintTop_toBottomOf="@+id/item_first_name"
                     tools:text="@string/blue" />
 
                 <TextView
-                    android:id="@+id/recent_time"
+                    android:id="@+id/item_recent_time"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="6dp"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/last_name"
+                    app:layout_constraintTop_toBottomOf="@+id/item_last_name"
                     tools:text="@string/_12_mins_ago" />
 
                 <ImageView
-                    android:id="@+id/call"
-                    android:layout_width="0dp"
+                    android:id="@+id/item_call"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginBottom="4dp"
                     android:padding="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/massage"
+                    app:layout_constraintEnd_toStartOf="@+id/item_massage"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toStartOf="parent"
@@ -102,15 +103,15 @@
                     tools:ignore="ContentDescription" />
 
                 <ImageView
-                    android:id="@+id/massage"
-                    android:layout_width="0dp"
+                    android:id="@+id/item_massage"
+                    android:layout_width="wrap_content"
                     android:layout_height="30dp"
                     android:layout_marginBottom="4dp"
                     android:padding="6dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/call"
+                    app:layout_constraintStart_toEndOf="@+id/item_call"
                     app:srcCompat="@drawable/ic_chat"
                     app:tint="#FF6216"
                     tools:ignore="ContentDescription" />
@@ -121,14 +122,14 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.makeramen.roundedimageview.RoundedImageView
-        android:id="@+id/cover"
+        android:id="@+id/item_cover"
         android:layout_width="45dp"
         android:layout_height="45dp"
+        android:scaleType="centerCrop"
         android:src="@color/colorAccent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/constraintLayout"
-        app:riv_oval="true"
-        tools:ignore="MissingConstraints" />
+        app:riv_oval="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
