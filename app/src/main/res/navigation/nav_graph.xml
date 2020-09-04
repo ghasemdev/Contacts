@@ -17,6 +17,27 @@
             app:exitAnim="@anim/slide_out_down"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/slide_out_up" />
+        <action
+            android:id="@+id/action_mainFragment_to_searchFragment"
+            app:destination="@id/searchFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_up" />
+        <action
+            android:id="@+id/action_mainFragment_to_showUserFragment"
+            app:destination="@id/showUserFragment"
+            app:enterAnim="@anim/fade_in"
+            app:exitAnim="@anim/fade_out"
+            app:popEnterAnim="@anim/fade_in"
+            app:popExitAnim="@anim/fade_out" />
+        <action
+            android:id="@+id/action_mainFragment_to_recentFragment"
+            app:destination="@id/recentFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_up" />
     </fragment>
 
     <fragment
@@ -24,5 +45,23 @@
         android:name="com.jakode.contacts.ui.fragments.AddUserFragment"
         android:label="fragment_add_user"
         tools:layout="@layout/fragment_add_user" />
+
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.jakode.contacts.ui.fragments.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/showUserFragment"
+        android:name="com.jakode.contacts.ui.fragments.ShowUserFragment"
+        android:label="fragment_show_user"
+        tools:layout="@layout/fragment_show_user" />
+
+    <fragment
+        android:id="@+id/recentFragment"
+        android:name="com.jakode.contacts.ui.fragments.RecentFragment"
+        android:label="fragment_recent"
+        tools:layout="@layout/fragment_recent" />
 
 </navigation>

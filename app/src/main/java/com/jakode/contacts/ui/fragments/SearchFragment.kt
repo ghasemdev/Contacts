@@ -2,15 +2,16 @@ package com.jakode.contacts.ui.fragments
 
 import android.content.Context
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
-import com.jakode.contacts.databinding.FragmentAddUserBinding
+import com.jakode.contacts.R
+import com.jakode.contacts.databinding.FragmentSearchBinding
 import com.jakode.contacts.utils.DrawerManager
 
-class AddUserFragment : Fragment() {
-    private lateinit var binding: FragmentAddUserBinding
+class SearchFragment : Fragment() {
+    private lateinit var binding: FragmentSearchBinding
     private lateinit var drawerManager: DrawerManager
 
     override fun onAttach(context: Context) {
@@ -27,7 +28,7 @@ class AddUserFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         drawerManager.lockDrawer()
-        binding = FragmentAddUserBinding.inflate(layoutInflater)
+        binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
