@@ -99,7 +99,7 @@
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toStartOf="parent"
                     app:srcCompat="@drawable/ic_call"
-                    app:tint="#00FF2B"
+                    app:tint="#47d147"
                     tools:ignore="ContentDescription" />
 
                 <ImageView
@@ -113,7 +113,7 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/recent_call"
                     app:srcCompat="@drawable/ic_chat"
-                    app:tint="#FF6216"
+                    app:tint="#1aa3ff"
                     tools:ignore="ContentDescription" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -111,10 +112,10 @@ class MainFragment : Fragment() {
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
             when (direction) {
-                ItemTouchHelper.LEFT -> {
+                ItemTouchHelper.RIGHT -> {
                     Toast.makeText(context, "$position call", Toast.LENGTH_SHORT).show()
                 }
-                ItemTouchHelper.RIGHT -> {
+                ItemTouchHelper.LEFT -> {
                     Toast.makeText(context, "$position massage", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -124,18 +125,25 @@ class MainFragment : Fragment() {
             c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
             dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
         ) {
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
             RecyclerViewSwipeDecorator.Builder(
                 c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
             )
-                .addSwipeLeftBackgroundColor(Color.parseColor("#66ff33"))
-                .addSwipeLeftActionIcon(R.drawable.ic_call)
-                .setSwipeLeftActionIconTint(Color.WHITE)
-                .addSwipeRightBackgroundColor(Color.parseColor("#ff5c33"))
-                .addSwipeRightActionIcon(R.drawable.ic_chat)
+                .addSwipeRightBackgroundColor(Color.parseColor("#47d147"))
+                .addSwipeRightActionIcon(R.drawable.ic_call)
                 .setSwipeRightActionIconTint(Color.WHITE)
+                .addSwipeRightLabel("Call")
+                .setSwipeRightLabelColor(Color.WHITE)
+                .setSwipeRightLabelTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
+                .addSwipeLeftBackgroundColor(Color.parseColor("#1aa3ff"))
+                .addSwipeLeftActionIcon(R.drawable.ic_chat)
+                .setSwipeLeftActionIconTint(Color.WHITE)
+                .addSwipeLeftLabel("Massage")
+                .setSwipeLeftLabelColor(Color.WHITE)
+                .setSwipeLeftLabelTextSize(TypedValue.COMPLEX_UNIT_SP, 18F)
+                .setIconHorizontalMargin(TypedValue.COMPLEX_UNIT_DIP,25)
                 .create()
                 .decorate()
-            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
         }
     }
 
