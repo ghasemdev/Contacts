@@ -41,6 +41,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nestedScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true"
@@ -51,14 +52,12 @@
             android:layout_height="wrap_content"
             android:background="@drawable/top_radius">
 
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginEnd="16dp"
-                android:text="@string/frag"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contact_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="32dp"
+                android:overScrollMode="never"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

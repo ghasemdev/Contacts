@@ -1,25 +1,30 @@
 package com.jakode.contacts.ui.fragments
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.Color
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.jakode.contacts.R
+import com.jakode.contacts.adapter.ContactAdapter
 import com.jakode.contacts.adapter.RecentAdapter
-import com.jakode.contacts.data.model.Recent
-import com.jakode.contacts.data.model.User
 import com.jakode.contacts.databinding.FragmentMainBinding
+import com.jakode.contacts.utils.Data
 import com.jakode.contacts.utils.DrawerManager
 import com.jakode.contacts.utils.ImageSetter
 import com.jakode.contacts.utils.PopupMenu
+import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var drawerManager: DrawerManager
-    private lateinit var viewAdapter: RecentAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,19 +65,78 @@ class MainFragment : Fragment() {
             binding.toolbarHeader.myCover
         )
 
-        // orientation and adapter
-        val viewManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        viewAdapter = RecentAdapter(users())
-
-        // Recycler view set setting
-        binding.toolbarHeader.recentList.apply {
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
+        // RecyclerViews
+        initRecycler()
 
         // Init clickable
         clickListener()
+    }
+
+    private fun initRecycler() {
+        // Recent list
+        binding.toolbarHeader.recentList.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = RecentAdapter(Data.recentUsers())
+        }
+
+        // Contact list
+        binding.contactList.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = ContactAdapter(Data.contactUsers())
+        }
+
+        // Handel Swipe and Move item of contact
+        itemTouchHelper()
+    }
+
+    private fun itemTouchHelper() {
+        ItemTouchHelper(SimpleCallBack()).apply {
+            attachToRecyclerView(binding.contactList)
+        }
+    }
+
+    // CallBack for swipe
+    inner class SimpleCallBack :
+        ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
+            return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            val position = viewHolder.adapterPosition
+            when (direction) {
+                ItemTouchHelper.LEFT -> {
+                    Toast.makeText(context, "$position call", Toast.LENGTH_SHORT).show()
+                }
+                ItemTouchHelper.RIGHT -> {
+                    Toast.makeText(context, "$position massage", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+
+        override fun onChildDraw( // Set icon and color for swipe
+            c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+            dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
+        ) {
+            RecyclerViewSwipeDecorator.Builder(
+                c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive
+            )
+                .addSwipeLeftBackgroundColor(Color.parseColor("#66ff33"))
+                .addSwipeLeftActionIcon(R.drawable.ic_call)
+                .setSwipeLeftActionIconTint(Color.WHITE)
+                .addSwipeRightBackgroundColor(Color.parseColor("#ff5c33"))
+                .addSwipeRightActionIcon(R.drawable.ic_chat)
+                .setSwipeRightActionIconTint(Color.WHITE)
+                .create()
+                .decorate()
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+        }
     }
 
     private fun clickListener() {
@@ -117,77 +181,4 @@ class MainFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    private fun users() = arrayListOf(
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        ),
-        Recent(
-            User(
-                "https://i.redd.it/hfdbbih4nou41.jpg",
-                "Jack",
-                "Blue"
-            ), "1 hr ago"
-        )
-    )
 }

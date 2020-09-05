@@ -64,26 +64,26 @@ class RecentAdapter(private val list: ArrayList<Recent>) :
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
-        val view: ConstraintLayout by lazy { itemView.item_view }
-        val cover: RoundedImageView by lazy { itemView.item_cover }
+        val view: ConstraintLayout by lazy { itemView.recent_view }
+        val cover: RoundedImageView by lazy { itemView.recent_cover }
 
-        val more: ImageView by lazy { itemView.item_more }
-        val call: ImageView by lazy { itemView.item_call }
-        val massage: ImageView by lazy { itemView.item_massage }
+        val more: ImageView by lazy { itemView.recent_more }
+        val call: ImageView by lazy { itemView.recent_call }
+        val massage: ImageView by lazy { itemView.recent_massage }
 
-        val firstName: TextView by lazy { itemView.item_first_name }
-        val lastName: TextView by lazy { itemView.item_last_name }
-        val recentTime: TextView by lazy { itemView.item_recent_time }
+        val firstName: TextView by lazy { itemView.recent_first_name }
+        val lastName: TextView by lazy { itemView.recent_last_name }
+        val recentTime: TextView by lazy { itemView.recent_time }
 
         override fun onClick(view: View?) {
             when (view?.id) {
-                R.id.item_more -> {
+                R.id.recent_more -> {
                     Toast.makeText(context, "more", Toast.LENGTH_SHORT).show()
                 }
-                R.id.item_call -> {
+                R.id.recent_call -> {
                     Toast.makeText(context, "call", Toast.LENGTH_SHORT).show()
                 }
-                R.id.item_massage -> {
+                R.id.recent_massage -> {
                     Toast.makeText(context, "massage", Toast.LENGTH_SHORT).show()
                 }
                 else -> {
