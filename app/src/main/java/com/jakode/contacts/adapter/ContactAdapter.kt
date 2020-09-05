@@ -1,5 +1,6 @@
 package com.jakode.contacts.adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -24,7 +25,11 @@ class ContactAdapter(private val list: ArrayList<User>) :
         )
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        // Set background
+        if (position == 0) holder.itemView.background = context.getDrawable(R.drawable.top_radius)
+
         // Init
         ImageSetter.set(list[position].cover, holder.cover)
         if (position == itemCount - 1) holder.divider.visibility = View.INVISIBLE

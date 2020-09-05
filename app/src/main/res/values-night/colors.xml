@@ -19,9 +19,9 @@
     <color name="color_divider">#424242</color>
 
     <!--color for button -->
-    <color name="gradient_start_color">#673AB7</color>
-    <color name="gradient_end_color">#7D53C6</color>
-    <color name="button_pressed">#7D53C6</color>
+    <color name="gradient_start_color">#4c84ff</color>
+    <color name="gradient_end_color">#18a3fe</color>
+    <color name="button_pressed">#18a3fe</color>
 
     <!--color for navigation view-->
     <color name="nav_view">#303030</color>
