@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:layout_gravity="bottom"
-                android:background="@color/background_color"
+                android:background="@color/background"
                 app:menu="@menu/main_menu"
                 app:navigationIcon="@drawable/ic_menu">
 

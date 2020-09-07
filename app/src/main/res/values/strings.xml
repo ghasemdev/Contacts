@@ -1,45 +1,28 @@
 <resources>
+    <!--Main Fragment-->
     <string name="app_name">Contacts</string>
-    <string name="add_user">Add User</string>
-    <string name="search">Search</string>
     <string name="recent">Recents</string>
-
-    <string name="more">More</string>
+    <string name="view_all">View all</string>
     <string name="delete">Delete</string>
     <string name="share">Share</string>
-    <string name="view_all">View all</string>
-
     <string name="call">Call</string>
     <string name="massage">Massage</string>
 
-    <string name="frag">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab accusamus animi aperiam aspernatur blanditiis corporis debitis dolore dolorum eos fuga maiores minus, molestias natus, pariatur repudiandae tempore voluptates! Amet, minus.
-    </string>
     <string name="jack">Jack</string>
     <string name="blue">Blue</string>
     <string name="_12_mins_ago">12 mins ago</string>
+
+    <!--Add User Fragment-->
+    <string name="name">Name</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="phone">Phone</string>
+    <string name="email">Email</string>
+    <string name="birthday">Birthday</string>
+    <string name="address">Address</string>
+    <string name="description">Description</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="ten_add_error">Maximum number is 10</string>
+
 </resources>
