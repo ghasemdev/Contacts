@@ -1,7 +1,6 @@
 package com.jakode.contacts.adapter
 
 import android.content.Context
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,9 +35,6 @@ class RecentAdapter(private val list: ArrayList<Recent>) :
 
         // Onclick listener
         onClickListener(holder)
-
-        // Set borderless ripple
-        borderlessRipple(holder)
     }
 
     private fun onClickListener(holder: ViewHolder) {
@@ -46,18 +42,6 @@ class RecentAdapter(private val list: ArrayList<Recent>) :
         holder.more.setOnClickListener(holder)
         holder.call.setOnClickListener(holder)
         holder.massage.setOnClickListener(holder)
-    }
-
-    private fun borderlessRipple(holder: ViewHolder) {
-        val outValue = TypedValue()
-        context.theme.resolveAttribute(
-            android.R.attr.selectableItemBackgroundBorderless,
-            outValue,
-            true
-        )
-        holder.more.setBackgroundResource(outValue.resourceId)
-        holder.call.setBackgroundResource(outValue.resourceId)
-        holder.massage.setBackgroundResource(outValue.resourceId)
     }
 
     override fun getItemCount() = list.size
