@@ -162,7 +162,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/phones_list"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:overScrollMode="never"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/phone_text"
@@ -225,7 +225,7 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/emails_list"
                         android:layout_width="0dp"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:overScrollMode="never"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="@+id/email_text"
@@ -258,6 +258,19 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/birthday_icon"
                         app:layout_constraintTop_toBottomOf="@+id/emails_list" />
+
+                    <TextView
+                        android:id="@+id/birthday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/birthday_text"
+                        app:layout_constraintEnd_toEndOf="@+id/birthday_text"
+                        app:layout_constraintTop_toTopOf="@+id/birthday_text" />
 
                     <View
                         android:id="@+id/birthday_divider"

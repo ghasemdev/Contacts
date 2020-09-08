@@ -11,7 +11,7 @@
 
     <!--Add User Fragment-->
     <string name="name">نام</string>
-    <string name="first_name">اسم کوچک</string>
+    <string name="first_name">نام</string>
     <string name="last_name">نام خانوادگی</string>
     <string name="phone">تلفن</string>
     <string name="email">ایمیل</string>
@@ -21,5 +21,10 @@
     <string name="cancel">لغو</string>
     <string name="save">ذخیره</string>
     <string name="ten_add_error">بیشترین تعداد ممکن</string>
+    <string name="first_name_error">نام نمی تواند خالی باشد</string>
+    <string name="last_name_error">نام خانوادگی نمی تواند خالی باشد</string>
+    <string name="phone_error">شماره وارد شده صحیح نیست</string>
+    <string name="phone_empty_error">شماره تلفنی وجود ندارد</string>
+    <string name="email_error">ایمیل وارد شده صحیح نیست</string>
 
 </resources>

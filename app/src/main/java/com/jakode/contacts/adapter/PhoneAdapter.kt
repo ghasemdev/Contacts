@@ -9,9 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
-import android.widget.EditText
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.jakode.contacts.R
 import kotlinx.android.synthetic.main.phone_list_item.view.*
 
@@ -25,6 +26,7 @@ class PhoneAdapter(
     RecyclerView.Adapter<PhoneAdapter.ViewHolder>() {
     private lateinit var context: Context
     private lateinit var perViewHolder: ViewHolder
+    private var error = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         context = parent.context
@@ -38,7 +40,14 @@ class PhoneAdapter(
         holder.itemView.animation = AnimationUtils.loadAnimation(context, R.anim.recycler_fall_down)
 
         // Init
-        holder.phone.setText(phones[position])
+        if (phones[position].contains("ERROR")) { // Handel incorrect phone
+            holder.tILPhone.error = context.resources.getString(R.string.phone_error)
+            phones[position] = phones[position].substring(5, phones[position].length)
+            holder.phone.setText(phones[position])
+            error = true
+        } else {
+            holder.phone.setText(phones[position])
+        }
 
         // OnClickListener
         holder.phone.addTextChangedListener(holder)
@@ -55,7 +64,8 @@ class PhoneAdapter(
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, TextWatcher {
-        val phone: EditText by lazy { itemView.phone }
+        val phone: TextInputEditText by lazy { itemView.phone }
+        val tILPhone: TextInputLayout by lazy { itemView.TIL_phone }
         val remove: ImageView by lazy { itemView.phone_remove_icon }
 
         override fun onClick(v: View?) {
@@ -66,10 +76,15 @@ class PhoneAdapter(
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (error) { // Remove error massage when text change
+                tILPhone.isErrorEnabled = false
+                error = false
+            }
+        }
 
         override fun afterTextChanged(s: Editable?) {
-            phones[adapterPosition] = s.toString()
+            phones[adapterPosition] = s.toString() // Update list
         }
     }
 

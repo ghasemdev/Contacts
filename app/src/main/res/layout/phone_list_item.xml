@@ -7,22 +7,25 @@
     android:background="@color/contact_background"
     android:focusableInTouchMode="false">
 
-    <EditText
-        android:id="@+id/phone"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TIL_phone"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/phone"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="phone"
-        android:maxLength="13"
+        android:layout_height="wrap_content"
+        app:hintEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/phone_remove_icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/phone"
+            android:imeOptions="actionDone"
+            android:inputType="phone"
+            android:maxLength="13" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/phone_remove_icon"
@@ -32,9 +35,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/phone"
+        app:layout_constraintBottom_toBottomOf="@+id/TIL_phone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/phone"
+        app:layout_constraintTop_toTopOf="@+id/TIL_phone"
         app:srcCompat="@drawable/ic_remove"
         app:tint="#ff1a1a"
         tools:ignore="ContentDescription" />

@@ -6,22 +6,25 @@
     android:layout_height="wrap_content"
     android:background="@color/contact_background">
 
-    <EditText
-        android:id="@+id/email"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/TIL_email"
         android:layout_width="0dp"
-        android:layout_height="56dp"
-        android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/email"
-        android:imeOptions="actionDone"
-        android:importantForAutofill="no"
-        android:inputType="textEmailAddress"
-        android:maxLength="30"
+        android:layout_height="wrap_content"
+        app:hintEnabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/email_remove_icon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="LabelFor" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email"
+            android:imeOptions="actionDone"
+            android:inputType="textEmailAddress"
+            android:maxLength="30" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <ImageView
         android:id="@+id/email_remove_icon"
@@ -31,9 +34,9 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
-        app:layout_constraintBottom_toBottomOf="@+id/email"
+        app:layout_constraintBottom_toBottomOf="@+id/TIL_email"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/email"
+        app:layout_constraintTop_toTopOf="@+id/TIL_email"
         app:srcCompat="@drawable/ic_remove"
         app:tint="#ff1a1a"
         tools:ignore="ContentDescription" />
