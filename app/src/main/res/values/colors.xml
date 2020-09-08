@@ -31,6 +31,10 @@
     <color name="nav_view">#FDFDFD</color>
     <color name="nav_view_footer">#D8D8D8</color>
 
+    <!--color for picker -->
+    <color name="mdtp_accent_color">#18a3fe</color>
+    <color name="mdtp_accent_color_dark">#4c84FF</color>
+
     <color name="color_white">#FFFFFF</color>
     <color name="color_black">#000000</color>
 

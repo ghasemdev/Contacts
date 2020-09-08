@@ -31,4 +31,8 @@
     <color name="nav_view">#1d1d1d</color>
     <color name="nav_view_footer">#535353</color>
 
+    <!--color for picker -->
+    <color name="mdtp_accent_color">#212121</color>
+    <color name="mdtp_accent_color_dark">#7D53C6</color>
+
 </resources>

@@ -6,6 +6,6 @@ import com.squareup.picasso.Picasso
 
 object ImageSetter {
     fun set(url: String, target: ImageView) {
-        Picasso.get().load(url).placeholder(R.drawable.cover_01).into(target)
+        Picasso.get().load(url).placeholder(R.drawable.cover_1).into(target)
     }
 }
