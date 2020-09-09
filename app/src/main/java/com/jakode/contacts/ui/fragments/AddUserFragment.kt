@@ -79,9 +79,10 @@ class AddUserFragment : Fragment(), TextWatcher {
         // RecyclerViews
         initRecycler()
 
-        // OnClick phone and email field
+        // OnClick phone, email and birthday
         phoneOnClick()
         emailOnClick()
+        birthdayOnClick()
 
         // Text change listener for first name and last name
         binding.firstName.addTextChangedListener(this)
@@ -92,18 +93,6 @@ class AddUserFragment : Fragment(), TextWatcher {
             Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).also {
                 it.type = "image/*"
                 startActivityForResult(it, REQ_CONTENT)
-            }
-        }
-
-        binding.birthdayText.setOnClickListener {
-            PickerDate.apply {
-                textView = binding.birthday
-                calendarType =
-                    if (Locale.getDefault().language == "fa") DatePickerDialog.Type.JALALI
-                    else DatePickerDialog.Type.GREGORIAN
-                setFont(requireActivity(), R.font.iran_sans_mobile_fa_num)
-                modeDarkDate = isDarkTheme(requireActivity())
-                show(parentFragmentManager, "date picker")
             }
         }
 
@@ -119,7 +108,7 @@ class AddUserFragment : Fragment(), TextWatcher {
     private fun addUser() {
         val firstName = binding.firstName.text.toString().trim()    // NotNull
         val lastName = binding.lastName.text.toString().trim()      // NotNull
-        val birthday = binding.birthday.hint?.toString()?.trim()
+        val birthday = binding.birthday.hint?.toString()
         val address = with(binding.address.text.toString().trim()) {
             if (this.isNotEmpty()) this else null
         }
@@ -199,6 +188,30 @@ class AddUserFragment : Fragment(), TextWatcher {
                 requireContext().getText(R.string.ten_add_error),
                 Toast.LENGTH_SHORT
             ).show()
+        }
+    }
+
+    private fun birthdayOnClick() {
+        binding.birthdayText.setOnClickListener {
+            PickerDate.apply {
+                textView = binding.birthday
+                imageView = binding.birthdayRemoveIcon
+                calendarType =
+                    if (Locale.getDefault().language == "fa") DatePickerDialog.Type.JALALI
+                    else DatePickerDialog.Type.GREGORIAN
+                setFont(requireActivity(), R.font.iran_sans_mobile_fa_num)
+                modeDarkDate = isDarkTheme(requireActivity())
+                show(parentFragmentManager, "date picker")
+            }
+        }
+
+        binding.birthdayRemoveIcon.setOnClickListener {
+            val birthday = binding.birthday.hint?.toString()
+
+            if (birthday != null) {
+                binding.birthday.hint = null
+                binding.birthdayRemoveIcon.visibility = View.INVISIBLE
+            }
         }
     }
 

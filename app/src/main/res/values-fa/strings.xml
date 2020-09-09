@@ -11,7 +11,7 @@
 
     <!--Add User Fragment-->
     <string name="name">نام</string>
-    <string name="first_name">نام</string>
+    <string name="first_name">اسم کوچک</string>
     <string name="last_name">نام خانوادگی</string>
     <string name="phone">تلفن</string>
     <string name="email">ایمیل</string>

@@ -5,6 +5,8 @@ import android.content.DialogInterface
 import android.content.res.Configuration
 import android.graphics.Typeface
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.FragmentManager
@@ -14,6 +16,7 @@ import java.util.*
 
 object PickerDate : DialogInterface.OnCancelListener, DatePickerDialog.OnDateSetListener {
     var textView: TextView? = null
+    lateinit var imageView: ImageView
     private var dpd: DatePickerDialog? = null
     var calendarType = DatePickerDialog.Type.GREGORIAN
     private var font: Typeface? = null
@@ -84,6 +87,9 @@ object PickerDate : DialogInterface.OnCancelListener, DatePickerDialog.OnDateSet
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         var myMonthOfYear = monthOfYear
         val date = "$dayOfMonth/${++myMonthOfYear}/$year"
-        textView?.let { it.hint = date }
+        textView?.let {
+            it.hint = date
+            imageView.visibility = View.VISIBLE
+        }
     }
 }
