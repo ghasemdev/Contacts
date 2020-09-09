@@ -5,6 +5,7 @@ import android.content.res.Resources
 import android.net.Uri
 import android.webkit.MimeTypeMap
 import android.widget.ImageView
+import com.squareup.picasso.Picasso
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -35,12 +36,19 @@ object ImageUtil {
         }
     }
 
-    fun setDefaultBackground(context: Context, target: ImageView): String {
-        val random = Random.nextInt(1, 10).toString()
-        val coverName = "cover_$random"
+    fun setDefaultImage(context: Context, target: ImageView, coverName: String? = null): String {
+        var cover = coverName
+        if (cover == null) {
+            val random = Random.nextInt(1, 10).toString()
+             cover = "cover_$random"
+        }
 
-        target.setImageResource(getResources(context, coverName))
-        return coverName
+        target.setImageResource(getResources(context, cover))
+        return cover
+    }
+
+    fun setImage(imageUri: Uri, target: ImageView) {
+        Picasso.get().load(imageUri).centerCrop().fit().into(target)
     }
 
     /**

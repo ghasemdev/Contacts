@@ -1,12 +1,12 @@
 package com.jakode.contacts.utils
 
 import com.jakode.contacts.data.model.Recent
-import com.jakode.contacts.data.model.User
+import com.jakode.contacts.data.model.UserTest
 
 object Data {
     fun recentUsers() = arrayListOf(
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -14,7 +14,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -22,7 +22,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -30,7 +30,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -38,7 +38,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -46,7 +46,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -54,7 +54,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -62,7 +62,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -70,7 +70,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -78,7 +78,7 @@ object Data {
             ), "1 hr ago"
         ),
         Recent(
-            User(
+            UserTest(
                 "https://i.redd.it/hfdbbih4nou41.jpg",
                 "Jack",
                 "Blue",
@@ -88,61 +88,61 @@ object Data {
     )
 
     fun contactUsers() = arrayListOf(
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",
             "09152165505"
         ),
-        User(
+        UserTest(
             "https://i.redd.it/hfdbbih4nou41.jpg",
             "Jack",
             "Blue",

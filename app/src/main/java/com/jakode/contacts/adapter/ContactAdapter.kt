@@ -9,12 +9,12 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.jakode.contacts.R
-import com.jakode.contacts.data.model.User
+import com.jakode.contacts.data.model.UserTest
 import com.jakode.contacts.utils.ImageSetter
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.contact_list_item.view.*
 
-class ContactAdapter(private val list: ArrayList<User>) :
+class ContactAdapter(private val list: ArrayList<UserTest>) :
     RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
     private lateinit var context: Context
 
