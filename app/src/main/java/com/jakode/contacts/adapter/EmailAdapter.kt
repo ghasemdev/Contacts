@@ -1,8 +1,6 @@
 package com.jakode.contacts.adapter
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,87 +9,136 @@ import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputLayout
 import com.jakode.contacts.R
-import kotlinx.android.synthetic.main.email_list_item.view.*
-import kotlinx.android.synthetic.main.phone_list_item.view.*
+import com.jakode.contacts.adapter.model.Item
+import com.jakode.contacts.utils.Intents
+import kotlinx.android.synthetic.main.input_email_list_item.view.*
+import kotlinx.android.synthetic.main.show_email_list_item.view.*
 
 private const val TAG = "EMAIL_ERROR"
 
 class EmailAdapter(
-    private var emails: ArrayList<String>,
-    private val icon: View,
-    private val divider: View
+    private var emails: ArrayList<Item>,
+    private val icon: View? = null,
+    private val divider: View? = null
 ) :
-    RecyclerView.Adapter<EmailAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
-    private lateinit var perViewHolder: ViewHolder
+    private lateinit var perViewHolder: InputHolder
     private var error = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.email_list_item, parent, false)
-        )
+        return when (viewType) {
+            0 -> InputHolder(
+                LayoutInflater.from(context).inflate(R.layout.input_email_list_item, parent, false)
+            )
+            else -> ShowHolder(
+                LayoutInflater.from(context).inflate(R.layout.show_email_list_item, parent, false)
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Animation
-        holder.itemView.animation = AnimationUtils.loadAnimation(context, R.anim.recycler_fall_down)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            0 -> {
+                // Animation
+                (holder as InputHolder).itemView.animation =
+                    AnimationUtils.loadAnimation(context, R.anim.recycler_fall_down)
 
-        // Init
-        if (emails[position].contains("ERROR")) { // Handel incorrect phone
-            holder.tILEmail.error = context.resources.getString(R.string.email_error)
-            emails[position] = emails[position].substring(5, emails[position].length)
-            holder.email.setText(emails[position])
-            error = true
-        } else {
-            holder.email.setText(emails[position])
+                // Init
+                holder.setData(position)
+
+                // IME
+                if (itemCount > 1) {
+                    perViewHolder.email.imeOptions = EditorInfo.IME_ACTION_NEXT
+                }
+                perViewHolder = holder
+
+                // OnClickListener
+                holder.onClick()
+            }
+            else -> {
+                // Init
+                (holder as ShowHolder).setData(emails[position].item)
+
+                // OnClick
+                holder.onClick()
+            }
         }
-
-        // OnClickListener
-        holder.email.addTextChangedListener(holder)
-        holder.remove.setOnClickListener(holder)
-
-        // IME
-        if (itemCount > 1) {
-            perViewHolder.email.imeOptions = EditorInfo.IME_ACTION_NEXT
-        }
-        perViewHolder = holder
     }
 
     override fun getItemCount() = emails.size
+    override fun getItemViewType(position: Int) = emails[position].type
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener, TextWatcher {
+    inner class ShowHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+        val email: TextView by lazy { itemView.show_email }
+
+        val emailIcon: ImageView by lazy { itemView.email_icon }
+
+        fun setData(email: String) {
+            this.email.text = email
+        }
+
+        fun onClick() {
+            emailIcon.setOnClickListener(this)
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View?) {
+            when (view?.id) {
+                R.id.email_icon -> {
+                    Intents.composeEmail(context, arrayOf(email.text.toString()), "", "")
+                }
+                else -> {
+                    Intents.composeEmail(context, arrayOf(email.text.toString()), "", "")
+                }
+            }
+        }
+    }
+
+    inner class InputHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val email: EditText by lazy { itemView.email }
         val tILEmail: TextInputLayout by lazy { itemView.TIL_email }
         val remove: ImageView by lazy { itemView.email_remove_icon }
 
-        override fun onClick(v: View?) {
-            removeItem(adapterPosition)
-            // Invisible add icon
-            if (emails.isEmpty()) iconHidden()
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (error) { // Remove error massage when text change
-                tILEmail.isErrorEnabled = false
-                error = false
+        fun setData(position: Int) {
+            if (emails[position].item.contains("ERROR")) { // Handel incorrect phone
+                tILEmail.error = context.resources.getString(R.string.email_error)
+                emails[position].item =
+                    emails[position].item.substring(5, emails[position].item.length)
+                this.email.setText(emails[position].item)
+                error = true
+            } else {
+                this.email.setText(emails[position].item)
             }
         }
 
-        override fun afterTextChanged(s: Editable?) {
-            emails[adapterPosition] = s.toString()
+        fun onClick() {
+            remove.setOnClickListener {
+                removeItem(adapterPosition)
+                // Invisible add icon
+                if (emails.isEmpty()) iconHidden()
+            }
+
+            email.addTextChangedListener {
+                if (error) { // Remove error massage when text change
+                    tILEmail.isErrorEnabled = false
+                    error = false
+                }
+                emails[adapterPosition].item = it.toString() // Update list
+            }
         }
     }
 
     // Add Item
     fun addItem() {
-        this.emails.add("")
+        this.emails.add(Item(0, ""))
         notifyItemInserted(emails.size - 1)
     }
 
@@ -108,12 +155,12 @@ class EmailAdapter(
     }
 
     fun iconDisplay() {
-        icon.visibility = View.VISIBLE
-        divider.visibility = View.INVISIBLE
+        icon!!.visibility = View.VISIBLE
+        divider!!.visibility = View.INVISIBLE
     }
 
     private fun iconHidden() {
-        icon.visibility = View.INVISIBLE
-        divider.visibility = View.VISIBLE
+        icon!!.visibility = View.INVISIBLE
+        divider!!.visibility = View.VISIBLE
     }
 }

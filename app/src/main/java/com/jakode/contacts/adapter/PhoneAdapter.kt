@@ -1,8 +1,6 @@
 package com.jakode.contacts.adapter
 
 import android.content.Context
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -10,87 +8,147 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
+import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.jakode.contacts.R
-import kotlinx.android.synthetic.main.phone_list_item.view.*
+import com.jakode.contacts.adapter.model.Item
+import com.jakode.contacts.utils.Intents
+import kotlinx.android.synthetic.main.input_phone_list_item.view.*
+import kotlinx.android.synthetic.main.show_phone_list_item.view.*
 
 private const val TAG = "PHONE_ERROR"
 
 class PhoneAdapter(
-    private var phones: ArrayList<String>,
-    private val icon: View,
-    private val divider: View
+    private var phones: ArrayList<Item>,
+    private val icon: View? = null,
+    private val divider: View? = null
 ) :
-    RecyclerView.Adapter<PhoneAdapter.ViewHolder>() {
+    RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
-    private lateinit var perViewHolder: ViewHolder
+    private lateinit var perViewHolder: InputHolder
     private var error = false
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         context = parent.context
-        return ViewHolder(
-            LayoutInflater.from(context).inflate(R.layout.phone_list_item, parent, false)
-        )
+        return when (viewType) {
+            0 -> InputHolder(
+                LayoutInflater.from(context).inflate(R.layout.input_phone_list_item, parent, false)
+            )
+            else -> ShowHolder(
+                LayoutInflater.from(context).inflate(R.layout.show_phone_list_item, parent, false)
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Animation
-        holder.itemView.animation = AnimationUtils.loadAnimation(context, R.anim.recycler_fall_down)
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            0 -> {
+                // Animation
+                (holder as InputHolder).itemView.animation =
+                    AnimationUtils.loadAnimation(context, R.anim.recycler_fall_down)
 
-        // Init
-        if (phones[position].contains("ERROR")) { // Handel incorrect phone
-            holder.tILPhone.error = context.resources.getString(R.string.phone_error)
-            phones[position] = phones[position].substring(5, phones[position].length)
-            holder.phone.setText(phones[position])
-            error = true
-        } else {
-            holder.phone.setText(phones[position])
+                // Init
+                holder.setData(position)
+
+                // IME
+                if (itemCount > 1) {
+                    perViewHolder.phone.imeOptions = EditorInfo.IME_ACTION_NEXT
+                }
+                perViewHolder = holder
+
+                // OnClickListener
+                holder.onClick()
+            }
+            else -> {
+                // Init
+                (holder as ShowHolder).setData(phones[position].item)
+
+                // OnClick
+                holder.onClick()
+            }
         }
-
-        // OnClickListener
-        holder.phone.addTextChangedListener(holder)
-        holder.remove.setOnClickListener(holder)
-
-        // IME
-        if (itemCount > 1) {
-            perViewHolder.phone.imeOptions = EditorInfo.IME_ACTION_NEXT
-        }
-        perViewHolder = holder
     }
 
     override fun getItemCount() = phones.size
+    override fun getItemViewType(position: Int) = phones[position].type
 
-    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener, TextWatcher {
+    inner class ShowHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
+        View.OnClickListener {
+        val phone: TextView by lazy { itemView.show_phone }
+
+        val call: ImageView by lazy { itemView.call_icon }
+        val massage: ImageView by lazy { itemView.massage_icon }
+        val duo: ImageView by lazy { itemView.duo_icon }
+
+        fun setData(phone: String) {
+            this.phone.text = phone
+        }
+
+        fun onClick() {
+            call.setOnClickListener(this)
+            massage.setOnClickListener(this)
+            duo.setOnClickListener(this)
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View?) {
+            when (view?.id) {
+                R.id.call_icon -> {
+                    Intents.dialPhoneNumber(context, phone.text.toString())
+                }
+                R.id.massage_icon -> {
+                    Intents.composeSmsMessage(context, phone.text.toString())
+                }
+                R.id.duo_icon -> {
+                    Intents.dialGoogleDuo(context, phone.text.toString())
+                }
+                else -> {
+                    Intents.dialPhoneNumber(context, phone.text.toString())
+                }
+            }
+        }
+    }
+
+    inner class InputHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val phone: TextInputEditText by lazy { itemView.phone }
         val tILPhone: TextInputLayout by lazy { itemView.TIL_phone }
         val remove: ImageView by lazy { itemView.phone_remove_icon }
 
-        override fun onClick(v: View?) {
-            removeItem(adapterPosition)
-            // Invisible add icon
-            if (phones.isEmpty()) iconHidden()
-        }
-
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (error) { // Remove error massage when text change
-                tILPhone.isErrorEnabled = false
-                error = false
+        fun setData(position: Int) {
+            if (phones[position].item.contains("ERROR")) { // Handel incorrect phone
+                tILPhone.error = context.resources.getString(R.string.phone_error)
+                phones[position].item =
+                    phones[position].item.substring(5, phones[position].item.length)
+                this.phone.setText(phones[position].item)
+                error = true
+            } else {
+                this.phone.setText(phones[position].item)
             }
         }
 
-        override fun afterTextChanged(s: Editable?) {
-            phones[adapterPosition] = s.toString() // Update list
+        fun onClick() {
+            remove.setOnClickListener {
+                removeItem(adapterPosition)
+                // Invisible add icon
+                if (phones.isEmpty()) iconHidden()
+            }
+
+            phone.addTextChangedListener {
+                if (error) { // Remove error massage when text change
+                    tILPhone.isErrorEnabled = false
+                    error = false
+                }
+                phones[adapterPosition].item = it.toString() // Update list
+            }
         }
     }
 
     // Add Item
     fun addItem() {
-        this.phones.add("")
+        this.phones.add(Item(0, ""))
         notifyItemInserted(phones.size - 1)
     }
 
@@ -107,12 +165,12 @@ class PhoneAdapter(
     }
 
     fun iconDisplay() {
-        icon.visibility = View.VISIBLE
-        divider.visibility = View.INVISIBLE
+        icon!!.visibility = View.VISIBLE
+        divider!!.visibility = View.INVISIBLE
     }
 
     private fun iconHidden() {
-        icon.visibility = View.INVISIBLE
-        divider.visibility = View.VISIBLE
+        icon!!.visibility = View.INVISIBLE
+        divider!!.visibility = View.VISIBLE
     }
 }
