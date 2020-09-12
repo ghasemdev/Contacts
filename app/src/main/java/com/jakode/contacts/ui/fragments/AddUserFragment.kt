@@ -1,7 +1,6 @@
 package com.jakode.contacts.ui.fragments
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -19,13 +18,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakode.contacts.R
 import com.jakode.contacts.adapter.EmailAdapter
 import com.jakode.contacts.adapter.PhoneAdapter
+import com.jakode.contacts.adapter.model.Item
 import com.jakode.contacts.data.model.Name
 import com.jakode.contacts.data.model.Profile
 import com.jakode.contacts.data.model.User
-import com.jakode.contacts.data.model.UserAndProfile
+import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentAddUserBinding
-import com.jakode.contacts.utils.DrawerManager
 import com.jakode.contacts.utils.ImageUtil
 import com.jakode.contacts.utils.PickerDate
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
@@ -35,13 +34,12 @@ import kotlin.collections.ArrayList
 class AddUserFragment : Fragment(), TextWatcher {
     private lateinit var binding: FragmentAddUserBinding
     private lateinit var appRepository: AppRepository
-    private lateinit var drawerManager: DrawerManager
 
     private lateinit var phoneAdapter: PhoneAdapter
     private lateinit var emailAdapter: EmailAdapter
 
-    private var phonesList = ArrayList<String>()
-    private var emailsList = ArrayList<String>()
+    private var phonesList = ArrayList<Item>()
+    private var emailsList = ArrayList<Item>()
 
     private var imageUri: Uri? = null
     private lateinit var imageDefault: String
@@ -50,27 +48,17 @@ class AddUserFragment : Fragment(), TextWatcher {
         const val REQ_CONTENT = 1
     }
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        try {
-            drawerManager = activity as DrawerManager
-        } catch (e: ClassCastException) {
-            throw ClassCastException("${activity.toString()} must implement DrawerLocker")
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        drawerManager.lockDrawer()
         binding = FragmentAddUserBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // init repository
+        // Init repository
         appRepository = AppRepository(requireContext())
 
         // Set default background cover
@@ -101,11 +89,15 @@ class AddUserFragment : Fragment(), TextWatcher {
         }
 
         binding.save.setOnClickListener {
-            if (isValid()) addUser()
+            if (isValid()) {
+                val action =
+                    AddUserFragmentDirections.actionAddUserFragmentToShowUserFragment(addUser())
+                findNavController().navigate(action)
+            }
         }
     }
 
-    private fun addUser() {
+    private fun addUser(): UserInfo {
         val firstName = binding.firstName.text.toString().trim()    // NotNull
         val lastName = binding.lastName.text.toString().trim()      // NotNull
         val birthday = binding.birthday.hint?.toString()
@@ -117,23 +109,29 @@ class AddUserFragment : Fragment(), TextWatcher {
         }
 
         fun saveImage() = ImageUtil.saveFilePrivate(requireContext(), imageUri!!)
-        fun phones() = phonesList.map { it.trim() }.filter { it.isNotEmpty() }.toList()
-        fun emails() = if (emailsList.isNotEmpty()) emailsList.map { it.trim() }
-            .filter { it.isNotEmpty() }.toList() else emailsList
+        fun phones() = phonesList.map { it.item.trim() }.filter { it.isNotEmpty() }.toList()
+        fun emails() = if (emailsList.isNotEmpty()) emailsList.map { it.item.trim() }
+            .filter { it.isNotEmpty() }.toList() else emailsList.map { it.item }
 
         val isBlock = false
         val isTrash = false
-        appRepository.insertUser(
-            UserAndProfile(
-                User(Name(firstName, lastName), isBlock, isTrash),
-                Profile(
-                    imageUri?.let { saveImage() } ?: imageDefault,
-                    birthday,
-                    address,
-                    description
-                )
+
+        val user = UserInfo( // Build user object
+            User(Name(firstName, lastName), isBlock, isTrash),
+            Profile(
+                imageUri?.let { saveImage() } ?: imageDefault,
+                birthday,
+                address,
+                description
             ), phones(), emails()
         )
+
+        // Insert user and update user id
+        val userId = appRepository.insertUser(user)
+        user.user.id = userId
+        user.profile.id = userId
+
+        return user
     }
 
     private fun initRecycler() {
@@ -234,7 +232,7 @@ class AddUserFragment : Fragment(), TextWatcher {
     private fun phonesListIsValid(): Boolean {
         return when {
             // When phone list or phone is empty
-            phonesList.isEmpty() || phonesList.map { it.trim() }.filter { it.isNotEmpty() }
+            phonesList.isEmpty() || phonesList.map { it.item.trim() }.filter { it.isNotEmpty() }
                 .count() == 0 -> {
                 Toast.makeText(
                     requireContext(),
@@ -245,10 +243,10 @@ class AddUserFragment : Fragment(), TextWatcher {
             }
             else -> { // Then validation of phones
                 for (index in phonesList.indices) {
-                    val phone = phonesList[index]
+                    val phone = phonesList[index].item
                     if (phone.isNotEmpty()) {
                         if (!Patterns.PHONE.matcher(phone).matches()) {
-                            phonesList[index] = "ERROR${phonesList[index]}"
+                            phonesList[index].item = "ERROR${phonesList[index].item}"
                             phoneAdapter.notifyDataSetChanged()
                             return false
                         }
@@ -262,21 +260,16 @@ class AddUserFragment : Fragment(), TextWatcher {
     private fun emailListIsValid(): Boolean {
         // Emails validation
         for (index in emailsList.indices) {
-            val email = emailsList[index].trim()
+            val email = emailsList[index].item.trim()
             if (email.isNotEmpty()) {
                 if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                    emailsList[index] = "ERROR${emailsList[index]}"
+                    emailsList[index].item = "ERROR${emailsList[index].item}"
                     emailAdapter.notifyDataSetChanged()
                     return false
                 }
             }
         }
         return true
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        drawerManager.unlockDrawer()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

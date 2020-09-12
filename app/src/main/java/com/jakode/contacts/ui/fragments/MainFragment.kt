@@ -150,7 +150,7 @@ class MainFragment : Fragment() {
     private fun clickListener() {
         // Cover click listener
         binding.toolbarHeader.myCover.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToShowUserFragment()
+            val action = MainFragmentDirections.actionMainFragmentToAdminFragment()
             findNavController().navigate(action)
         }
 
@@ -183,7 +183,7 @@ class MainFragment : Fragment() {
             R.id.more -> {
                 // Open more options
                 val anchor: View = requireView().findViewById(R.id.more)
-                PopupMenu.show(anchor, 0, -125)
+                PopupMenu.show(PopupMenu.Type.MAIN_POPUP, anchor, 0, -125)
                 true
             }
             else -> super.onOptionsItemSelected(item)

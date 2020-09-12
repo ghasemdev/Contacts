@@ -48,7 +48,23 @@ class MainActivity : AppCompatActivity(), DrawerManager {
     private fun fragmentManager() {
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
+                R.id.mainFragment -> {
+                    unlockDrawer()
+                }
                 R.id.addUserFragment -> {
+                    lockDrawer()
+                }
+                R.id.adminFragment -> {
+                    lockDrawer()
+                }
+                R.id.recentFragment -> {
+                    lockDrawer()
+                }
+                R.id.searchFragment -> {
+                    lockDrawer()
+                }
+                R.id.showUserFragment -> {
+                    lockDrawer()
                 }
             }
         }
