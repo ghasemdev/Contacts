@@ -8,16 +8,25 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
 import com.jakode.contacts.R
-import kotlinx.android.synthetic.main.popup_layout.view.*
+import kotlinx.android.synthetic.main.main_popup_layout.view.*
+import kotlinx.android.synthetic.main.main_popup_layout.view.delete
+import kotlinx.android.synthetic.main.show_user_popup_layout.view.*
 
 object PopupMenu {
+    enum class Type {
+        MAIN_POPUP, SHOW_USER_POPUP
+    }
+
     // PopupWindow display method
     @SuppressLint("InflateParams")
-    fun show(view: View, x: Int, y: Int) {
+    fun show(type: Type, view: View, x: Int, y: Int) {
         // Create a View object yourself through inflater
         val inflater =
             view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val popupView: View = inflater.inflate(R.layout.popup_layout, null)
+        val popupView: View = when (type) {
+            Type.MAIN_POPUP -> inflater.inflate(R.layout.main_popup_layout, null)
+            Type.SHOW_USER_POPUP -> inflater.inflate(R.layout.show_user_popup_layout, null)
+        }
 
         // Specify the length and width through constants
         val width = LinearLayout.LayoutParams.WRAP_CONTENT
@@ -34,22 +43,38 @@ object PopupMenu {
         popupWindow.showAsDropDown(view, x, y)
 
         // Initialize the elements of our window, install the handler
-        clickListener(popupView, popupWindow, view)
+        clickListener(popupView, popupWindow, view, type)
     }
 
     private fun clickListener(
         popupView: View,
         popupWindow: PopupWindow,
-        view: View
+        view: View,
+        type: Type
     ) {
-        popupView.delete.setOnClickListener {
-            popupWindow.dismiss()
-            Toast.makeText(view.context, "delete", Toast.LENGTH_SHORT).show()
-        }
+        when (type) {
+            Type.MAIN_POPUP -> {
+                popupView.delete.setOnClickListener {
+                    popupWindow.dismiss()
+                    Toast.makeText(view.context, "delete", Toast.LENGTH_SHORT).show()
+                }
 
-        popupView.share.setOnClickListener {
-            popupWindow.dismiss()
-            Toast.makeText(view.context, "share", Toast.LENGTH_SHORT).show()
+                popupView.share.setOnClickListener {
+                    popupWindow.dismiss()
+                    Toast.makeText(view.context, "share", Toast.LENGTH_SHORT).show()
+                }
+            }
+            Type.SHOW_USER_POPUP -> {
+                popupView.delete.setOnClickListener {
+                    popupWindow.dismiss()
+                    Toast.makeText(view.context, "delete user", Toast.LENGTH_SHORT).show()
+                }
+
+                popupView.block.setOnClickListener {
+                    popupWindow.dismiss()
+                    Toast.makeText(view.context, "block user", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 }

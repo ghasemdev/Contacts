@@ -27,4 +27,11 @@
     <string name="phone_empty_error">شماره تلفنی وجود ندارد</string>
     <string name="email_error">ایمیل وارد شده صحیح نیست</string>
 
+    <!--Show User Fragment-->
+    <string name="edit">ویرایش</string>
+    <string name="share_title">اشتراک گذاری مخاطب به عنوان</string>
+    <string name="file">فایل</string>
+    <string name="text">متن</string>
+    <string name="block">انسداد مخاطب</string>
+
 </resources>

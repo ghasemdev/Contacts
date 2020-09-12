@@ -30,4 +30,11 @@
     <string name="phone_empty_error">Phones is empty</string>
     <string name="email_error">Email is wrong</string>
 
+    <!--show User Fragment-->
+    <string name="edit">Edit</string>
+    <string name="share_title">Share contact as</string>
+    <string name="file">File</string>
+    <string name="text">Text</string>
+    <string name="block">Block</string>
+
 </resources>
