@@ -31,11 +31,8 @@ class ContactAdapter(private val list: ArrayList<UserTest>) :
         if (position == 0) holder.itemView.background = context.getDrawable(R.drawable.top_radius)
 
         // Init
-        ImageSetter.set(list[position].cover, holder.cover)
+        holder.setData(list[position])
         if (position == itemCount - 1) holder.divider.visibility = View.INVISIBLE
-        val name = "${list[position].firstName} ${list[position].lastName}"
-        holder.name.text = name
-        holder.phone.text = list[position].phone
 
         // Onclick listener
         holder.itemView.setOnClickListener(holder)
@@ -50,6 +47,13 @@ class ContactAdapter(private val list: ArrayList<UserTest>) :
 
         val name: TextView by lazy { itemView.contact_name }
         val phone: TextView by lazy { itemView.contact_phone }
+
+        fun setData(user: UserTest) {
+            ImageSetter.set(user.cover, cover)
+            val name = "${user.firstName} ${user.lastName}"
+            this.name.text = name
+            phone.text = user.phone
+        }
 
         override fun onClick(v: View?) {
             Toast.makeText(context, "contact body", Toast.LENGTH_SHORT).show()

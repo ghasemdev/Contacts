@@ -28,12 +28,9 @@ class RecentAdapter(private val list: ArrayList<Recent>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // Init
-        ImageSetter.set(list[position].user.cover, holder.cover)
-        holder.firstName.text = list[position].user.firstName
-        holder.lastName.text = list[position].user.lastName
-        holder.recentTime.text = list[position].recentTime
+        holder.setData(list[position])
 
-        // Onclick listener
+        // OnClick listener
         onClickListener(holder)
     }
 
@@ -58,6 +55,13 @@ class RecentAdapter(private val list: ArrayList<Recent>) :
         val firstName: TextView by lazy { itemView.recent_first_name }
         val lastName: TextView by lazy { itemView.recent_last_name }
         val recentTime: TextView by lazy { itemView.recent_time }
+
+        fun setData(recent: Recent) {
+            ImageSetter.set(recent.user.cover, cover)
+            firstName.text = recent.user.firstName
+            lastName.text = recent.user.lastName
+            recentTime.text = recent.recentTime
+        }
 
         override fun onClick(view: View?) {
             when (view?.id) {
