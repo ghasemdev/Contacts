@@ -22,15 +22,17 @@ class AppRepository(context: Context) {
         emailDao = db.emailDao()
     }
 
-    fun insertUser(user: UserAndProfile, phones: List<String>, emails: List<String>) {
+    fun insertUser(user: UserInfo): Long {
         userDao.insert(user.user)
         profileDao.insert(user.profile)
 
-        val phonesList = toPhone(phones)
-        val emailsList = toEmail(emails)
+        val userId = getUserId()
+        val phonesList = toPhone(user.phones, userId)
+        val emailsList = toEmail(user.emails, userId)
 
         phonesList.forEach { phoneDao.insert(it) }
         emailsList.forEach { emailDao.insert(it) }
+        return userId
     }
 
     fun updateUser(user: UserAndProfile, phones: List<Phone>, emails: List<Email>) {
@@ -108,16 +110,14 @@ class AppRepository(context: Context) {
         }
     }
 
-    private fun toPhone(phones: List<String>): List<Phone> {
+    private fun toPhone(phones: List<String>, userId: Long): List<Phone> {
         val phonesList = ArrayList<Phone>()
-        val userId = getUserId()
         for (phone in phones) phonesList.add(Phone(userId, phone))
         return phonesList
     }
 
-    private fun toEmail(emails: List<String>): List<Email> {
+    private fun toEmail(emails: List<String>, userId: Long): List<Email> {
         val emailsList = ArrayList<Email>()
-        val userId = getUserId()
         for (email in emails) emailsList.add(Email(userId, email))
         return emailsList
     }
