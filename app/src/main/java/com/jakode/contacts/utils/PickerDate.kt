@@ -86,7 +86,7 @@ object PickerDate : DialogInterface.OnCancelListener, DatePickerDialog.OnDateSet
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
         var myMonthOfYear = monthOfYear
-        val date = "$dayOfMonth/${++myMonthOfYear}/$year"
+        val date = "$year/${++myMonthOfYear}/$dayOfMonth"
         textView?.let {
             it.hint = date
             imageView.visibility = View.VISIBLE
