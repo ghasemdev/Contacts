@@ -40,7 +40,7 @@ object ImageUtil {
         var cover = coverName
         if (cover == null) {
             val random = Random.nextInt(1, 10).toString()
-             cover = "cover_$random"
+            cover = "cover_$random"
         }
 
         target.setImageResource(getResources(context, cover))
