@@ -27,8 +27,8 @@ class AppRepository(context: Context) {
         profileDao.insert(user.profile)
 
         val userId = getUserId()
-        val phonesList = toPhone(user.phones, userId)
-        val emailsList = toEmail(user.emails, userId)
+        val phonesList = stringToPhone(user.phones, userId)
+        val emailsList = stringToEmail(user.emails, userId)
 
         phonesList.forEach { phoneDao.insert(it) }
         emailsList.forEach { emailDao.insert(it) }
@@ -63,9 +63,32 @@ class AppRepository(context: Context) {
         emailDao.deleteAll()
     }
 
-    fun getAllUsers() = userDao.getAllUsersAndProfiles()
-    fun getAllUsersWithPhones() = userDao.getAllUsersWithPhones()
-    fun getAllUsersWithEmails() = userDao.getAllUsersWithEmails()
+    fun getAllUsers(): ArrayList<UserInfo> {
+        val list = ArrayList<UserInfo>()
+
+        val users = getAllUsersAndProfiles()
+        val phones = getAllUsersWithPhones()
+        val emails = getAllUsersWithEmails()
+
+        var index = 0
+        users.forEach {
+            list.add(
+                UserInfo(
+                    it.user,
+                    it.profile,
+                    phoneToString(phones[index].phones),
+                    emailToString(emails[index].emails)
+                )
+            )
+            index++
+        }
+        list.sortBy { it.user.name.firstName }
+        return list
+    }
+
+    private fun getAllUsersAndProfiles() = userDao.getAllUsersAndProfiles()
+    private fun getAllUsersWithPhones() = userDao.getAllUsersWithPhones()
+    private fun getAllUsersWithEmails() = userDao.getAllUsersWithEmails()
 
     fun findUserById(id: String) = userDao.getUserAndProfile(id)
     fun findUserWithPhonesById(id: String) = userDao.getUserWithPhones(id)
@@ -110,20 +133,32 @@ class AppRepository(context: Context) {
         }
     }
 
-    private fun toPhone(phones: List<String>, userId: Long): List<Phone> {
+    private fun stringToPhone(phones: List<String>, userId: Long): List<Phone> {
         val phonesList = ArrayList<Phone>()
         for (phone in phones) phonesList.add(Phone(userId, phone))
         return phonesList
     }
 
-    private fun toEmail(emails: List<String>, userId: Long): List<Email> {
+    private fun stringToEmail(emails: List<String>, userId: Long): List<Email> {
         val emailsList = ArrayList<Email>()
         for (email in emails) emailsList.add(Email(userId, email))
         return emailsList
     }
 
+    private fun phoneToString(phones: List<Phone>): List<String> {
+        val phonesList = ArrayList<String>()
+        for (phone in phones) phonesList.add(phone.number)
+        return phonesList
+    }
+
+    private fun emailToString(emails: List<Email>): List<String> {
+        val emailsList = ArrayList<String>()
+        for (email in emails) emailsList.add(email.email)
+        return emailsList
+    }
+
     private fun getUserId(): Long {
-        val users = userDao.getAllUsersAndProfiles()
-        return users[users.size - 1].user.id
+        val users = userDao.getAllUsers()
+        return users[users.size - 1].id
     }
 }

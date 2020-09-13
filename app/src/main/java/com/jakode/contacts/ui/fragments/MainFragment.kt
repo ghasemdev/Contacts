@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.jakode.contacts.R
 import com.jakode.contacts.adapter.ContactAdapter
 import com.jakode.contacts.adapter.RecentAdapter
+import com.jakode.contacts.data.model.UserInfo
+import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentMainBinding
 import com.jakode.contacts.utils.Data
 import com.jakode.contacts.utils.DrawerManager
@@ -26,6 +28,9 @@ import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var drawerManager: DrawerManager
+    private lateinit var appRepository: AppRepository
+
+    private var usersList = ArrayList<UserInfo>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -60,6 +65,12 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        // Init repository
+        appRepository = AppRepository(requireContext())
+
+        // Init list of users
+        usersList = appRepository.getAllUsers()
+
         // Init cover
         ImageSetter.set(
             "https://i.redd.it/hfdbbih4nou41.jpg",
@@ -85,7 +96,7 @@ class MainFragment : Fragment() {
         binding.contactList.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            adapter = ContactAdapter(Data.contactUsers())
+            adapter = ContactAdapter(usersList)
         }
 
         // Handel Swipe and Move item of contact

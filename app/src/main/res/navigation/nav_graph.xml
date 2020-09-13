@@ -38,6 +38,13 @@
             app:exitAnim="@anim/slide_out_down"
             app:popEnterAnim="@anim/slide_in_down"
             app:popExitAnim="@anim/slide_out_up" />
+        <action
+            android:id="@+id/action_mainFragment_to_showUserFragment"
+            app:destination="@id/showUserFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_up" />
     </fragment>
 
     <fragment
@@ -78,7 +85,7 @@
         android:id="@+id/showUserFragment"
         android:name="com.jakode.contacts.ui.fragments.ShowUserFragment"
         android:label="fragment_show_user"
-        tools:layout="@layout/fragment_show_user" >
+        tools:layout="@layout/fragment_show_user">
         <argument
             android:name="user"
             app:argType="com.jakode.contacts.data.model.UserInfo" />

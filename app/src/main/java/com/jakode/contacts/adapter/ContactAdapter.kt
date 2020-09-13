@@ -6,15 +6,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.core.net.toUri
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.jakode.contacts.R
-import com.jakode.contacts.data.model.UserTest
-import com.jakode.contacts.utils.ImageSetter
+import com.jakode.contacts.data.model.UserInfo
+import com.jakode.contacts.ui.fragments.MainFragmentDirections
+import com.jakode.contacts.utils.ImageUtil
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.contact_list_item.view.*
 
-class ContactAdapter(private val list: ArrayList<UserTest>) :
+class ContactAdapter(private val users: ArrayList<UserInfo>) :
     RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
     private lateinit var context: Context
 
@@ -27,18 +29,15 @@ class ContactAdapter(private val list: ArrayList<UserTest>) :
 
     @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Set background
-        if (position == 0) holder.itemView.background = context.getDrawable(R.drawable.top_radius)
 
         // Init
-        holder.setData(list[position])
-        if (position == itemCount - 1) holder.divider.visibility = View.INVISIBLE
+        holder.setData(users[position])
 
         // Onclick listener
         holder.itemView.setOnClickListener(holder)
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() = users.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener {
@@ -48,15 +47,22 @@ class ContactAdapter(private val list: ArrayList<UserTest>) :
         val name: TextView by lazy { itemView.contact_name }
         val phone: TextView by lazy { itemView.contact_phone }
 
-        fun setData(user: UserTest) {
-            ImageSetter.set(user.cover, cover)
-            val name = "${user.firstName} ${user.lastName}"
+        fun setData(userInfo: UserInfo) {
+            val coverName = userInfo.profile.cover
+            if (coverName.contains("cover")) {
+                ImageUtil.setDefaultImage(context, cover, coverName)
+            } else {
+                val uri = ImageUtil.loadFilePrivate(context, coverName).toUri()
+                ImageUtil.setImage(uri, cover)
+            }
+            val name = "${userInfo.user.name.firstName} ${userInfo.user.name.lastName}"
             this.name.text = name
-            phone.text = user.phone
+            phone.text = userInfo.phones[0]
         }
 
-        override fun onClick(v: View?) {
-            Toast.makeText(context, "contact body", Toast.LENGTH_SHORT).show()
+        override fun onClick(view: View?) {
+            val action = MainFragmentDirections.actionMainFragmentToShowUserFragment(users[adapterPosition])
+            view!!.findNavController().navigate(action)
         }
     }
 }

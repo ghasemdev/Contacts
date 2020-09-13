@@ -23,6 +23,9 @@ interface UserDao : BaseDao<User> {
     @Query("DELETE FROM users")
     fun deleteAll()
 
+    @Query("SELECT * From users")
+    fun getAllUsers(): List<User>
+
     //------------------------------------------------------------------------------------------
     @Transaction
     @Query("SELECT * FROM users")
