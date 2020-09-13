@@ -11,10 +11,10 @@ import kotlinx.android.parcel.Parcelize
 data class Profile(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "profile_id") var id: Long,
-    val cover: String,
-    val birthday: String?,
-    val address: String?,
-    val description: String?
+    var cover: String,
+    var birthday: String?,
+    var address: String?,
+    var description: String?
 ) : Parcelable {
     constructor(cover: String, birthday: String?, address: String?, description: String?) :
             this(0, cover, birthday, address, description)

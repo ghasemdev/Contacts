@@ -35,11 +35,16 @@ class AppRepository(context: Context) {
         return userId
     }
 
-    fun updateUser(user: UserAndProfile, phones: List<Phone>, emails: List<Email>) {
+    fun updateUser(user: UserInfo) {
         userDao.update(user.user)
         profileDao.update(user.profile)
-        phones.forEach { phoneDao.update(it) }
-        emails.forEach { emailDao.update(it) }
+
+        val userId = user.user.id
+        val phonesList = stringToPhoneUpdate(user.phones, userId)
+        val emailsList = stringToEmailUpdate(user.emails, userId)
+
+        phonesList.forEach { phoneDao.update(it) }
+        emailsList.forEach { emailDao.update(it) }
     }
 
     fun deleteUser(user: UserAndProfile, phones: List<Phone>, emails: List<Email>) {
@@ -154,6 +159,46 @@ class AppRepository(context: Context) {
     private fun emailToString(emails: List<Email>): List<String> {
         val emailsList = ArrayList<String>()
         for (email in emails) emailsList.add(email.email)
+        return emailsList
+    }
+
+    private fun stringToPhoneUpdate(phones: List<String>, userId: Long): List<Phone> {
+        val phonesList = ArrayList<Phone>()
+        val userPhones = userDao.getUserWithPhones(userId.toString()).phones
+
+        when (userPhones.size == phones.size) {
+            true -> { // Maybe something change
+                for (index in phones.indices) {
+                    phonesList.add(Phone(userPhones[index].id, userId, phones[index]))
+                }
+            }
+            else -> { // Add or Remove number
+                // Step 1 : remove all numbers belong user
+                phoneDao.deleteByUserId(userId.toString())
+                // Step 2 : add new numbers
+                stringToPhone(phones, userId).forEach { phoneDao.insert(it) }
+            }
+        }
+        return phonesList
+    }
+
+    private fun stringToEmailUpdate(emails: List<String>, userId: Long): List<Email> {
+        val emailsList = ArrayList<Email>()
+        val userEmails = userDao.getUserWithEmails(userId.toString()).emails
+
+        when (userEmails.size == emails.size) {
+            true -> { // Maybe something change
+                for (index in emails.indices) {
+                    emailsList.add(Email(userEmails[index].id, userId, emails[index]))
+                }
+            }
+            else -> { // Add or Remove number
+                // Step 1 : remove all emails belong user
+                emailDao.deleteByUserId(userId.toString())
+                // Step 2 : add new emails
+                stringToEmail(emails, userId).forEach { emailDao.insert(it) }
+            }
+        }
         return emailsList
     }
 

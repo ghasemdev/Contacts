@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layoutDirection="locale"
+    tools:context=".ui.fragments.EditUserFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/box_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/view"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="100dp"
+                android:layout_marginBottom="200dp"
+                app:cardBackgroundColor="@color/contact_background"
+                app:cardCornerRadius="40dp"
+                app:cardElevation="0dp"
+                app:cardMaxElevation="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="60dp">
+
+                    <ImageView
+                        android:id="@+id/name_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_person"
+                        app:layout_constraintBottom_toBottomOf="@+id/name_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/name_text"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/name_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:hint="@string/name"
+                        android:paddingTop="8dp"
+                        android:paddingBottom="8dp"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/name_icon"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/TIL_first_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toEndOf="@+id/name_text"
+                        app:layout_constraintStart_toStartOf="@+id/name_text"
+                        app:layout_constraintTop_toBottomOf="@+id/name_text">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/first_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/first_name"
+                            android:inputType="text"
+                            android:maxLength="30" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/TIL_last_name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        app:layout_constraintEnd_toEndOf="@+id/name_text"
+                        app:layout_constraintStart_toStartOf="@+id/name_text"
+                        app:layout_constraintTop_toBottomOf="@+id/TIL_first_name">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/last_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/last_name"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLength="30" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/phone_icon"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="16dp"
+                        android:padding="2dp"
+                        android:src="@drawable/ic_call"
+                        app:layout_constraintBottom_toBottomOf="@+id/phone_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/phone_text"
+                        app:tint="?attr/colorControlNormal"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/phone_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="32dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/phone"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@+id/phone_add_icon"
+                        app:layout_constraintStart_toEndOf="@+id/phone_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/TIL_last_name" />
+
+                    <ImageView
+                        android:id="@+id/phone_add_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        app:layout_constraintBottom_toBottomOf="@+id/phone_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/phone_text"
+                        app:srcCompat="@drawable/ic_add"
+                        app:tint="#15b76c"
+                        tools:ignore="ContentDescription" />
+
+                    <View
+                        android:id="@+id/phone_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@color/color_divider2"
+                        android:visibility="invisible"
+                        app:layout_constraintEnd_toEndOf="@+id/phone_add_icon"
+                        app:layout_constraintStart_toStartOf="@+id/phone_text"
+                        app:layout_constraintTop_toBottomOf="@+id/phone_text" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/phones_list"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/phone_text"
+                        app:layout_constraintTop_toBottomOf="@id/phone_divider" />
+
+                    <ImageView
+                        android:id="@+id/email_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_email"
+                        app:layout_constraintBottom_toBottomOf="@+id/email_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/email_text"
+                        app:tint="?attr/colorControlNormal"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/email_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/email"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@+id/email_add_icon"
+                        app:layout_constraintStart_toEndOf="@+id/email_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/phones_list" />
+
+                    <ImageView
+                        android:id="@+id/email_add_icon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/email_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/email_text"
+                        app:srcCompat="@drawable/ic_add"
+                        app:tint="#15b76c"
+                        tools:ignore="ContentDescription" />
+
+                    <View
+                        android:id="@+id/email_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@color/color_divider2"
+                        app:layout_constraintEnd_toEndOf="@+id/email_add_icon"
+                        app:layout_constraintStart_toStartOf="@+id/email_text"
+                        app:layout_constraintTop_toBottomOf="@+id/email_text" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/emails_list"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:overScrollMode="never"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/email_text"
+                        app:layout_constraintTop_toBottomOf="@+id/email_divider" />
+
+                    <ImageView
+                        android:id="@+id/birthday_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_date"
+                        app:layout_constraintBottom_toBottomOf="@+id/birthday_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/birthday_text"
+                        app:tint="?attr/colorControlNormal"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:id="@+id/birthday_text"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="32dp"
+                        android:gravity="center_vertical"
+                        android:hint="@string/birthday"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        app:layout_constraintEnd_toStartOf="@+id/birthday_remove_icon"
+                        app:layout_constraintStart_toEndOf="@+id/birthday_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/emails_list" />
+
+                    <TextView
+                        android:id="@+id/birthday"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:gravity="center_vertical"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textSize="18sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/birthday_text"
+                        app:layout_constraintEnd_toEndOf="@+id/birthday_text"
+                        app:layout_constraintTop_toTopOf="@+id/birthday_text" />
+
+                    <ImageView
+                        android:id="@+id/birthday_remove_icon"
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:visibility="invisible"
+                        app:layout_constraintBottom_toBottomOf="@+id/birthday_text"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/birthday_text"
+                        app:srcCompat="@drawable/ic_clear"
+                        app:tint="#ff1a1a"
+                        tools:ignore="ContentDescription" />
+
+                    <View
+                        android:id="@+id/birthday_divider"
+                        android:layout_width="0dp"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_marginEnd="4dp"
+                        android:background="@color/color_divider2"
+                        app:layout_constraintEnd_toEndOf="@+id/birthday_remove_icon"
+                        app:layout_constraintStart_toStartOf="@+id/birthday_text"
+                        app:layout_constraintTop_toBottomOf="@+id/birthday_text" />
+
+                    <ImageView
+                        android:id="@+id/address_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_location"
+                        app:layout_constraintBottom_toBottomOf="@+id/TIL_address"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/TIL_address"
+                        app:tint="?attr/colorControlNormal"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/TIL_address"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="14dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/address_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/birthday_divider">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/address"
+                            android:inputType="text"
+                            android:maxLength="30" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <ImageView
+                        android:id="@+id/description_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:src="@drawable/ic_description"
+                        app:layout_constraintBottom_toBottomOf="@+id/TIL_description"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="@+id/TIL_description"
+                        app:tint="?attr/colorControlNormal"
+                        tools:ignore="ContentDescription" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/TIL_description"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginTop="32dp"
+                        android:layout_marginEnd="14dp"
+                        android:layout_marginBottom="60dp"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="150"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/description_icon"
+                        app:layout_constraintTop_toBottomOf="@+id/TIL_address">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/description"
+                            android:inputType="textMultiLine"
+                            android:maxLength="150"
+                            android:maxLines="5" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/cover"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:scaleType="centerCrop"
+                android:src="@color/colorAccent"
+                app:layout_constraintBottom_toTopOf="@+id/view"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/view"
+                app:riv_oval="true" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/box_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/button_ripple_background"
+            android:text="@string/save"
+            android:textAllCaps="false"
+            android:textColor="@color/color_secondary_text"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/cancel"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/button_ripple_background"
+            android:text="@string/cancel"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/save"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

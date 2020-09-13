@@ -28,7 +28,7 @@ class EmailAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
-    private lateinit var perViewHolder: InputHolder
+    private var perViewHolder: InputHolder? = null
     private var error = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -55,7 +55,7 @@ class EmailAdapter(
 
                 // IME
                 if (itemCount > 1) {
-                    perViewHolder.email.imeOptions = EditorInfo.IME_ACTION_NEXT
+                    perViewHolder?.email?.imeOptions = EditorInfo.IME_ACTION_NEXT
                 }
                 perViewHolder = holder
 

@@ -132,24 +132,19 @@ class ShowUserFragment : Fragment() {
         }
 
         binding.edit.setOnClickListener {
-
+            val action =
+                ShowUserFragmentDirections.actionShowUserFragmentToEditUserFragment(userInfo)
+            findNavController().navigate(action)
         }
     }
 
     private fun initialize() {
-        // Cover
         cover()
-        // Name
         name()
-        // Phone
         phone()
-        // User email icon
         emailVisibility()
-        // Birthday
         birthday()
-        // Address
         address()
-        // Description
         description()
     }
 

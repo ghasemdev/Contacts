@@ -8,6 +8,6 @@ import kotlinx.android.parcel.RawValue
 data class UserInfo(
     val user: @RawValue User,
     val profile: @RawValue Profile,
-    val phones: List<String>,
-    val emails: List<String>
+    var phones: List<String>,
+    var emails: List<String>
 ) : Parcelable

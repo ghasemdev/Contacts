@@ -28,7 +28,7 @@ object VCard {
             "FN:${userInfo.user.name.firstName} ${userInfo.user.name.lastName}\n" +
             getPhones(userInfo.phones) +
             getEmails(userInfo.emails) +
-            if (userInfo.profile.birthday != null) { "BDAY:${convertDate(userInfo.profile.birthday)}\n" } else { "" } +
+            if (userInfo.profile.birthday != null) { "BDAY:${convertDate(userInfo.profile.birthday!!)}\n" } else { "" } +
             if (userInfo.profile.description != null) { "NOTE:${userInfo.profile.description}\n" } else { "" } +
             "x-qq:21588891\n" +
             "END:VCARD"

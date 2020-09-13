@@ -66,6 +66,9 @@ class MainActivity : AppCompatActivity(), DrawerManager {
                 R.id.showUserFragment -> {
                     lockDrawer()
                 }
+                R.id.editUserFragment -> {
+                    lockDrawer()
+                }
             }
         }
     }

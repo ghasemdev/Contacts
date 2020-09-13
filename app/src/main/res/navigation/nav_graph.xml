@@ -89,6 +89,34 @@
         <argument
             android:name="user"
             app:argType="com.jakode.contacts.data.model.UserInfo" />
+        <action
+            android:id="@+id/action_showUserFragment_to_editUserFragment"
+            app:destination="@id/editUserFragment"
+            app:enterAnim="@anim/slide_in_up"
+            app:exitAnim="@anim/slide_out_down"
+            app:popEnterAnim="@anim/slide_in_down"
+            app:popExitAnim="@anim/slide_out_up"
+            app:popUpTo="@id/showUserFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/editUserFragment"
+        android:name="com.jakode.contacts.ui.fragments.EditUserFragment"
+        android:label="fragment_edit_user"
+        tools:layout="@layout/fragment_edit_user">
+        <argument
+            android:name="user"
+            app:argType="com.jakode.contacts.data.model.UserInfo" />
+        <action
+            android:id="@+id/action_editUserFragment_to_showUserFragment"
+            app:destination="@id/showUserFragment"
+            app:enterAnim="@anim/slide_in_down"
+            app:exitAnim="@anim/slide_out_up"
+            app:popEnterAnim="@anim/slide_in_up"
+            app:popExitAnim="@anim/slide_out_down"
+            app:popUpTo="@id/editUserFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 </navigation>
