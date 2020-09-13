@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -19,18 +18,16 @@ import com.jakode.contacts.adapter.RecentAdapter
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentMainBinding
-import com.jakode.contacts.utils.Data
-import com.jakode.contacts.utils.DrawerManager
-import com.jakode.contacts.utils.ImageSetter
-import com.jakode.contacts.utils.PopupMenu
+import com.jakode.contacts.utils.*
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private lateinit var drawerManager: DrawerManager
     private lateinit var appRepository: AppRepository
+    private lateinit var contactAdapter: ContactAdapter
 
-    private var usersList = ArrayList<UserInfo>()
+    private var users = ArrayList<UserInfo>()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -69,7 +66,8 @@ class MainFragment : Fragment() {
         appRepository = AppRepository(requireContext())
 
         // Init list of users
-        usersList = appRepository.getAllUsers()
+        users = appRepository.getAllUsers()
+        if (users.isEmpty()) binding.emptyAlarm.visibility = View.VISIBLE
 
         // Init cover
         ImageSetter.set(
@@ -93,10 +91,11 @@ class MainFragment : Fragment() {
         }
 
         // Contact list
+        contactAdapter = ContactAdapter(users)
         binding.contactList.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-            adapter = ContactAdapter(usersList)
+            adapter = contactAdapter
         }
 
         // Handel Swipe and Move item of contact
@@ -124,10 +123,12 @@ class MainFragment : Fragment() {
             val position = viewHolder.adapterPosition
             when (direction) {
                 ItemTouchHelper.RIGHT -> {
-                    Toast.makeText(context, "$position call", Toast.LENGTH_SHORT).show()
+                    contactAdapter.notifyDataSetChanged()
+                    Intents.dialPhoneNumber(requireContext(), users[position].phones[0])
                 }
                 ItemTouchHelper.LEFT -> {
-                    Toast.makeText(context, "$position massage", Toast.LENGTH_SHORT).show()
+                    contactAdapter.notifyDataSetChanged()
+                    Intents.composeSmsMessage(requireContext(), users[position].phones[0])
                 }
             }
         }

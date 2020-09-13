@@ -8,6 +8,7 @@
     <string name="share">اشتراک گذاری</string>
     <string name="call">تماس</string>
     <string name="massage">پیام</string>
+    <string name="empty_list">مخاطبی وجود ندارد</string>
 
     <!--Add User Fragment-->
     <string name="name">نام</string>

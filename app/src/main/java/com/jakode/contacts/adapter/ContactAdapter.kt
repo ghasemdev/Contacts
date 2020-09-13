@@ -1,6 +1,5 @@
 package com.jakode.contacts.adapter
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -27,9 +26,7 @@ class ContactAdapter(private val users: ArrayList<UserInfo>) :
         )
     }
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-
         // Init
         holder.setData(users[position])
 
