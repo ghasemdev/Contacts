@@ -10,6 +10,7 @@
     <color name="contact_background">#f2f2f2</color>
     <color name="corner_background">#f2f2f2</color>
     <color name="popup_background">#fcfcfc</color>
+    <color name="selected_background">#1A18A3FE</color>
 
     <!--color for icon-->
     <color name="icon_color">#FF000000</color>

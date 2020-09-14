@@ -9,6 +9,8 @@
     <string name="call">تماس</string>
     <string name="massage">پیام</string>
     <string name="empty_list">مخاطبی وجود ندارد</string>
+    <string name="select_contacts">انتخاب مخاطبین</string>
+    <string name="selected">انتخاب شد</string>
 
     <!--Add User Fragment-->
     <string name="name">نام</string>
