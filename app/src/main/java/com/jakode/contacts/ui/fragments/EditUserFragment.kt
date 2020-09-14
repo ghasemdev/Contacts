@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,7 +31,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import java.util.*
 import kotlin.collections.ArrayList
 
-class EditUserFragment : Fragment(), TextWatcher {
+class EditUserFragment : Fragment(), TextWatcher, View.OnKeyListener {
     private lateinit var binding: FragmentEditUserBinding
     private lateinit var userInfo: UserInfo
     private lateinit var appRepository: AppRepository
@@ -79,6 +80,9 @@ class EditUserFragment : Fragment(), TextWatcher {
 
         // Init field
         initialize()
+
+        // Back press
+        onBackPressed(view)
 
         // OnClick phone, email and birthday
         phoneOnClick()
@@ -341,6 +345,22 @@ class EditUserFragment : Fragment(), TextWatcher {
                 }
             }
         }
+    }
+
+    private fun onBackPressed(view: View) {
+        view.isFocusableInTouchMode = true
+        view.requestFocus()
+        view.setOnKeyListener(this)
+    }
+
+    override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            val action =
+                EditUserFragmentDirections.actionEditUserFragmentToShowUserFragment(userInfo)
+            findNavController().navigate(action)
+            return true
+        }
+        return false
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
