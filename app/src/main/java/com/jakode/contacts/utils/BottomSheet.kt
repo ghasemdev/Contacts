@@ -1,37 +1,66 @@
 package com.jakode.contacts.utils
 
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.jakode.contacts.R
 import com.jakode.contacts.data.model.UserInfo
-import kotlinx.android.synthetic.main.layout_bottom_sheet.*
-import kotlinx.android.synthetic.main.layout_bottom_sheet.view.*
-import java.lang.StringBuilder
+import com.jakode.contacts.data.repository.AppRepository
+import kotlinx.android.synthetic.main.bottom_delete_layout.view.*
+import kotlinx.android.synthetic.main.bottom_share_layout.*
+import kotlinx.android.synthetic.main.bottom_share_layout.view.*
 
-class BottomSheet(context: Context, theme: Int, userInfo: UserInfo) :
-    BottomSheetDialog(context, theme) {
-    private var view: View =
-        LayoutInflater.from(context).inflate(R.layout.layout_bottom_sheet, bottomSheetContainer)
+class BottomSheet(type: Type, activity: Activity, theme: Int, userInfo: UserInfo) :
+    BottomSheetDialog(activity, theme) {
+    private var navController: NavigateManager = activity as NavigateManager
+    private var appRepository: AppRepository = AppRepository(context)
+
+    private var view: View = when (type) {
+        Type.BOTTOM_SHARE -> LayoutInflater.from(context)
+            .inflate(R.layout.bottom_share_layout, bottomSheetContainer)
+        Type.BOTTOM_DELETE -> LayoutInflater.from(context)
+            .inflate(R.layout.bottom_delete_layout, bottomSheetContainer)
+    }
+
+    enum class Type {
+        BOTTOM_SHARE, BOTTOM_DELETE
+    }
 
     init {
         setContentView(view)
-        onClick(userInfo)
+        onClick(type, userInfo)
     }
 
-    private fun onClick(userInfo: UserInfo) {
-        // Share with file
-        view.file.setOnClickListener {
-            dismiss()
-            Intents.sendVCard(context, userInfo)
-        }
+    private fun onClick(type: Type, userInfo: UserInfo) {
+        when (type) {
+            Type.BOTTOM_SHARE -> {
+                // Share with file
+                view.file.setOnClickListener {
+                    dismiss()
+                    Intents.sendVCard(context, userInfo)
+                }
 
-        // Share with text
-        view.text.setOnClickListener {
-            dismiss()
-            Intents.sendText(context, getUserText(userInfo))
+                // Share with text
+                view.text.setOnClickListener {
+                    dismiss()
+                    Intents.sendText(context, getUserText(userInfo))
+                }
+            }
+            Type.BOTTOM_DELETE -> {
+                // Cancel
+                view.cancel.setOnClickListener {
+                    dismiss()
+                }
+
+                // Delete
+                view.move.setOnClickListener {
+                    dismiss()
+                    appRepository.deleteUser(userInfo.user.id.toString())
+                    navController.navigateUp()
+                }
+            }
         }
     }
 
@@ -39,9 +68,21 @@ class BottomSheet(context: Context, theme: Int, userInfo: UserInfo) :
         return "[${getName()}] ${userInfo.user.name.firstName} ${userInfo.user.name.lastName}\n" +
                 getPhones(userInfo.phones) +
                 getEmails(userInfo.emails) +
-                if (userInfo.profile.birthday != null) { "[${getBirthday()}] ${userInfo.profile.birthday}\n" } else { "" } +
-                if (userInfo.profile.address != null) { "[${getAddress()}] ${userInfo.profile.address}\n" } else { "" } +
-                if (userInfo.profile.description != null) { "[${getDescription()}] ${userInfo.profile.description}\n" } else { "" }
+                if (userInfo.profile.birthday != null) {
+                    "[${getBirthday()}] ${userInfo.profile.birthday}\n"
+                } else {
+                    ""
+                } +
+                if (userInfo.profile.address != null) {
+                    "[${getAddress()}] ${userInfo.profile.address}\n"
+                } else {
+                    ""
+                } +
+                if (userInfo.profile.description != null) {
+                    "[${getDescription()}] ${userInfo.profile.description}\n"
+                } else {
+                    ""
+                }
     }
 
     private fun getPhones(phones: List<String>): String {

@@ -12,8 +12,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.jakode.contacts.R
 import com.jakode.contacts.databinding.ActivityMainBinding
 import com.jakode.contacts.utils.DrawerManager
+import com.jakode.contacts.utils.NavigateManager
 
-class MainActivity : AppCompatActivity(), DrawerManager {
+class MainActivity : AppCompatActivity(), DrawerManager, NavigateManager {
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private val navController by lazy {
@@ -101,5 +102,9 @@ class MainActivity : AppCompatActivity(), DrawerManager {
                 binding.contentMain.content.translationX = slideX
             }
         })
+    }
+
+    override fun navigateUp() {
+        navController.navigateUp()
     }
 }

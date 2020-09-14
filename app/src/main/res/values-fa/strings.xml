@@ -30,9 +30,12 @@
 
     <!--Show User Fragment-->
     <string name="edit">ویرایش</string>
+    <string name="block">انسداد مخاطب</string>
     <string name="share_title">اشتراک گذاری مخاطب به عنوان</string>
     <string name="file">فایل</string>
     <string name="text">متن</string>
-    <string name="block">انسداد مخاطب</string>
+    <string name="delete_title">این مخاطب به سطل زباله منتقل شود؟</string>
+    <string name="delete_subtitle">این مخاطب به مدت 30 روز در سطل زباله نگهداری خواهد شد.</string>
+    <string name="move">حذف</string>
 
 </resources>

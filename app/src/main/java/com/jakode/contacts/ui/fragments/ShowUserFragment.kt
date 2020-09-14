@@ -1,7 +1,6 @@
 package com.jakode.contacts.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
@@ -74,8 +73,6 @@ class ShowUserFragment : Fragment() {
 
         // OnClick
         onClick()
-
-        Log.i("USER", userInfo.toString())
     }
 
     private fun onClick() {
@@ -128,7 +125,12 @@ class ShowUserFragment : Fragment() {
 
     private fun navOnClick() {
         binding.share.setOnClickListener {
-            BottomSheet(requireContext(), R.style.BottomSheetDialogTheme, userInfo).show()
+            BottomSheet(
+                BottomSheet.Type.BOTTOM_SHARE,
+                requireActivity(),
+                R.style.BottomSheetDialogTheme,
+                userInfo
+            ).show()
         }
 
         binding.edit.setOnClickListener {
@@ -240,7 +242,7 @@ class ShowUserFragment : Fragment() {
             R.id.show_user_more -> {
                 // Open more options
                 val anchor: View = requireView().findViewById(R.id.show_user_more)
-                PopupMenu.show(PopupMenu.Type.SHOW_USER_POPUP, anchor, 0, -125)
+                PopupMenu.show(PopupMenu.Type.SHOW_USER_POPUP, userInfo, anchor, 0, -125)
                 true
             }
             else -> super.onOptionsItemSelected(item)

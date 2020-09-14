@@ -195,7 +195,7 @@ class MainFragment : Fragment() {
             R.id.more -> {
                 // Open more options
                 val anchor: View = requireView().findViewById(R.id.more)
-                PopupMenu.show(PopupMenu.Type.MAIN_POPUP, anchor, 0, -125)
+                PopupMenu.show(PopupMenu.Type.MAIN_POPUP, userInfo = null, anchor, 0, -125)
                 true
             }
             else -> super.onOptionsItemSelected(item)

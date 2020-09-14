@@ -8,8 +8,8 @@
     app:cardCornerRadius="15dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="135dp"
-        android:layout_height="80dp">
+        android:layout_width="150dp"
+        android:layout_height="90dp">
 
         <LinearLayout
             android:id="@+id/delete"
@@ -30,7 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="10dp"
-                android:text="@string/delete" />
+                android:text="@string/delete"
+                android:textSize="16sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -52,7 +53,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="10dp"
-                android:text="@string/share" />
+                android:text="@string/share"
+                android:textSize="16sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

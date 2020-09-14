@@ -1,6 +1,7 @@
 package com.jakode.contacts.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,8 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
 import com.jakode.contacts.R
+import com.jakode.contacts.data.model.UserInfo
 import kotlinx.android.synthetic.main.main_popup_layout.view.*
-import kotlinx.android.synthetic.main.main_popup_layout.view.delete
 import kotlinx.android.synthetic.main.show_user_popup_layout.view.*
 
 object PopupMenu {
@@ -19,7 +20,7 @@ object PopupMenu {
 
     // PopupWindow display method
     @SuppressLint("InflateParams")
-    fun show(type: Type, view: View, x: Int, y: Int) {
+    fun show(type: Type, userInfo: UserInfo?, view: View, x: Int, y: Int) {
         // Create a View object yourself through inflater
         val inflater =
             view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -43,15 +44,17 @@ object PopupMenu {
         popupWindow.showAsDropDown(view, x, y)
 
         // Initialize the elements of our window, install the handler
-        clickListener(popupView, popupWindow, view, type)
+        clickListener(type, userInfo, popupView, popupWindow, view)
     }
 
     private fun clickListener(
+        type: Type,
+        userInfo: UserInfo?,
         popupView: View,
         popupWindow: PopupWindow,
-        view: View,
-        type: Type
+        view: View
     ) {
+
         when (type) {
             Type.MAIN_POPUP -> {
                 popupView.delete.setOnClickListener {
@@ -65,9 +68,14 @@ object PopupMenu {
                 }
             }
             Type.SHOW_USER_POPUP -> {
-                popupView.delete.setOnClickListener {
+                popupView.delete_user.setOnClickListener {
                     popupWindow.dismiss()
-                    Toast.makeText(view.context, "delete user", Toast.LENGTH_SHORT).show()
+                    BottomSheet(
+                        BottomSheet.Type.BOTTOM_DELETE,
+                        view.context as Activity,
+                        R.style.BottomSheetDialogTheme,
+                        userInfo!!
+                    ).show()
                 }
 
                 popupView.block.setOnClickListener {

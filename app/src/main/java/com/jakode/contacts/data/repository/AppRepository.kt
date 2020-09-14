@@ -47,13 +47,6 @@ class AppRepository(context: Context) {
         emailsList.forEach { emailDao.update(it) }
     }
 
-    fun deleteUser(user: UserAndProfile, phones: List<Phone>, emails: List<Email>) {
-        userDao.delete(user.user)
-        profileDao.delete(user.profile)
-        phones.forEach { phoneDao.delete(it) }
-        emails.forEach { emailDao.delete(it) }
-    }
-
     fun deleteUser(id: String) {
         userDao.deleteById(id)
         profileDao.deleteById(id)

@@ -33,9 +33,12 @@
 
     <!--show User Fragment-->
     <string name="edit">Edit</string>
+    <string name="block">Block</string>
     <string name="share_title">Share contact as</string>
     <string name="file">File</string>
     <string name="text">Text</string>
-    <string name="block">Block</string>
+    <string name="delete_title">Delete this contact?</string>
+    <string name="delete_subtitle">This contact will be kept in the trash for 30 days.</string>
+    <string name="move">Delete</string>
 
 </resources>
