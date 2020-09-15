@@ -11,6 +11,8 @@
     <string name="empty_list">مخاطبی وجود ندارد</string>
     <string name="select_contacts">انتخاب مخاطبین</string>
     <string name="selected">انتخاب شد</string>
+    <string name="all">همه</string>
+    <string name="create_group">ایجاد گروه</string>
 
     <!--Add User Fragment-->
     <string name="name">نام</string>

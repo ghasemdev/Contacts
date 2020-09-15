@@ -79,7 +79,9 @@ class ContactAdapter(
         @SuppressLint("UseCompatLoadingForDrawables")
         private fun initSelectionOption(userInfo: UserInfo) {
             checkBox.isChecked = if (userInfo.isSelected) {
-                itemView.background = context.getDrawable(R.drawable.selected_ripple_background)
+                itemView.background =
+                    if (adapterPosition == 0) context.getDrawable(R.drawable.selected_top_background)
+                    else context.getDrawable(R.drawable.selected_background)
                 true
             } else {
                 itemView.background = null

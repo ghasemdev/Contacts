@@ -10,6 +10,8 @@
     <string name="empty_list">Nothing to show</string>
     <string name="select_contacts">Select Contacts</string>
     <string name="selected">Selected</string>
+    <string name="all">All</string>
+    <string name="create_group">Create group</string>
 
     <string name="jack">Jack</string>
     <string name="blue">Blue</string>

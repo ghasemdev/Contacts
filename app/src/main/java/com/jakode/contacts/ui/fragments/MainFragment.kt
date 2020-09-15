@@ -1,18 +1,21 @@
 package com.jakode.contacts.ui.fragments
 
 import android.animation.AnimatorInflater
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.AppBarLayout
 import com.jakode.contacts.R
 import com.jakode.contacts.adapter.ContactAdapter
 import com.jakode.contacts.adapter.RecentAdapter
@@ -195,6 +198,20 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         binding.share.setOnClickListener {
             val selectedContacts = contactAdapter.getSelectedContacts()
         }
+
+        // Select all button
+        binding.selectAll.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                users.filter { !it.isSelected }.forEach { it.isSelected = true }.also {
+                    contactAdapter.notifyDataSetChanged()
+                }
+            } else {
+                users.filter { it.isSelected }.forEach { it.isSelected = false }.also {
+                    contactAdapter.notifyDataSetChanged()
+                }
+            }
+            onContactAction(true)
+        }
     }
 
     private fun onBackPressed(view: View) {
@@ -226,15 +243,22 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.search -> {
-                // Safe args
-                val action = MainFragmentDirections.actionMainFragmentToSearchFragment()
-                findNavController().navigate(action)
+                if (selectionMode) {
+                    Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
+                } else {
+                    val action = MainFragmentDirections.actionMainFragmentToSearchFragment()
+                    findNavController().navigate(action)
+                }
                 true
             }
             R.id.more -> {
-                // Open more options
                 val anchor: View = requireView().findViewById(R.id.more)
-                PopupMenu.show(PopupMenu.Type.MAIN_POPUP, userInfo = null, anchor, 0, -125)
+                if (selectionMode) { // Open more options
+                    PopupMenu
+                        .show(PopupMenu.Type.SELECTION_MODE_POPUP, userInfo = null, anchor, 0, -125)
+                } else {
+                    PopupMenu.show(PopupMenu.Type.MAIN_POPUP, userInfo = null, anchor, 0, -125)
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -243,9 +267,11 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
     override var selectionMode: Boolean = false
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onContactAction(isSelected: Boolean) {
         super.onContactAction(isSelected)
-        if (isSelected) {
+
+        if (isSelected) { // Selection mode enabled
             if (requireAnimIn) {
                 fabHidden()         // Fab hidden
                 boxButtonShow()     // Box button show
@@ -258,26 +284,69 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
             // Showing selection header
             selectionHeaderShow()
             initSelectionHeader()
-        } else {
+
+            // Hidden toolbar item
+            toolbarItemHidden()
+        } else { // Selection mode disabled
             if (requireAnimOut) {
                 fabShow()           // Fab show
                 boxButtonHidden()   // Box button hidden
                 requireAnimIn = true
                 requireAnimOut = false
             }
-            selectionHeaderHidden() // Hidden selection header
+            // Hidden selection header
+            selectionHeaderHidden()
+
+            // Show toolbar item
+            toolbarItemShow()
         }
     }
 
+    private fun toolbarItemHidden() {
+        binding.toolbar.navigationIcon = null
+        binding.selectAll.visibility = View.VISIBLE
+        binding.checkboxText.visibility = View.VISIBLE
+
+        // Toolbar Text
+        binding.appbar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+                if (state == State.EXPANDED) { // Open
+                    binding.selectedUsers.visibility = View.GONE
+                } else if (state == State.COLLAPSED) { // Closed
+                    binding.selectedUsers.visibility = View.VISIBLE
+                    binding.selectedUsers.text = selectedUser()
+                }
+            }
+        })
+
+        // Select all coordinated with body selection
+        when (contactAdapter.getSelectedContacts().size) {
+            0 -> binding.selectAll.isChecked = false
+            users.size -> binding.selectAll.isChecked = true
+        }
+        drawerManager.lockDrawer()
+    }
+
+    @SuppressLint("UseCompatLoadingForDrawables")
+    private fun toolbarItemShow() {
+        binding.toolbar.navigationIcon = requireContext().getDrawable(R.drawable.ic_menu)
+        binding.selectAll.visibility = View.GONE
+        binding.checkboxText.visibility = View.GONE
+        binding.selectedUsers.visibility = View.GONE
+        drawerManager.unlockDrawer()
+    }
+
     private fun initSelectionHeader() {
+        binding.toolbarHeaderSelection.contactSelect.text = selectedUser()
+    }
+
+    private fun selectedUser(): String {
         val selectedContacts = contactAdapter.getSelectedContacts()
-        val text: String
-        text = if (selectedContacts.isNotEmpty()) {
+        return if (selectedContacts.isNotEmpty()) {
             "${selectedContacts.size} ${resources.getString(R.string.selected)}"
         } else {
             resources.getString(R.string.select_contacts)
         }
-        binding.toolbarHeaderSelection.contactSelect.text = text
     }
 
     private fun selectionHeaderShow() {

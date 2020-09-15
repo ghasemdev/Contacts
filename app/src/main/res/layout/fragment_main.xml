@@ -43,8 +43,54 @@
                 app:menu="@menu/main_menu"
                 app:navigationIcon="@drawable/ic_menu">
 
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <CheckBox
+                        android:id="@+id/select_all"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:button="@drawable/checkbox"
+                        android:buttonTint="@color/icon_color"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toTopOf="@+id/checkbox_text"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="packed" />
+
+                    <TextView
+                        android:id="@+id/checkbox_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/all"
+                        android:textAlignment="center"
+                        android:textColor="@color/color_primary_text"
+                        android:textSize="10sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/select_all"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="@+id/select_all"
+                        app:layout_constraintTop_toBottomOf="@+id/select_all"
+                        tools:ignore="SmallSp" />
+
+                    <TextView
+                        android:id="@+id/selected_users"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:textColor="@color/icon_color"
+                        android:textSize="16sp"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="@+id/checkbox_text"
+                        app:layout_constraintStart_toEndOf="@+id/select_all"
+                        app:layout_constraintTop_toTopOf="@+id/select_all"
+                        tools:text="@string/select_contacts" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.Toolbar>
         </com.google.android.material.appbar.CollapsingToolbarLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

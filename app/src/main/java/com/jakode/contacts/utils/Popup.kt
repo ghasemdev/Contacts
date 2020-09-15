@@ -11,11 +11,12 @@ import android.widget.Toast
 import com.jakode.contacts.R
 import com.jakode.contacts.data.model.UserInfo
 import kotlinx.android.synthetic.main.main_popup_layout.view.*
+import kotlinx.android.synthetic.main.selection_popup_layout.view.*
 import kotlinx.android.synthetic.main.show_user_popup_layout.view.*
 
 object PopupMenu {
     enum class Type {
-        MAIN_POPUP, SHOW_USER_POPUP
+        MAIN_POPUP, SELECTION_MODE_POPUP, SHOW_USER_POPUP
     }
 
     // PopupWindow display method
@@ -27,6 +28,7 @@ object PopupMenu {
         val popupView: View = when (type) {
             Type.MAIN_POPUP -> inflater.inflate(R.layout.main_popup_layout, null)
             Type.SHOW_USER_POPUP -> inflater.inflate(R.layout.show_user_popup_layout, null)
+            Type.SELECTION_MODE_POPUP -> inflater.inflate(R.layout.selection_popup_layout, null)
         }
 
         // Specify the length and width through constants
@@ -81,6 +83,12 @@ object PopupMenu {
                 popupView.block.setOnClickListener {
                     popupWindow.dismiss()
                     Toast.makeText(view.context, "block user", Toast.LENGTH_SHORT).show()
+                }
+            }
+            Type.SELECTION_MODE_POPUP -> {
+                popupView.create_group.setOnClickListener {
+                    popupWindow.dismiss()
+                    Toast.makeText(view.context, "create group", Toast.LENGTH_SHORT).show()
                 }
             }
         }
