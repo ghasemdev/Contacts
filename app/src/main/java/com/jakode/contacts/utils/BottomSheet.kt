@@ -11,9 +11,16 @@ import com.jakode.contacts.data.repository.AppRepository
 import kotlinx.android.synthetic.main.bottom_delete_layout.view.*
 import kotlinx.android.synthetic.main.bottom_share_layout.*
 import kotlinx.android.synthetic.main.bottom_share_layout.view.*
+import java.util.*
 
-class BottomSheet(type: Type, activity: Activity, theme: Int, userInfo: UserInfo) :
-    BottomSheetDialog(activity, theme) {
+class BottomSheet(
+    val type: Type,
+    val activity: Activity,
+    theme: Int,
+    val userInfo: UserInfo? = null,
+    val users: List<UserInfo>? = null,
+    val selectionManager: SelectionManager? = null
+) : BottomSheetDialog(activity, theme) {
     private var navController: NavigateManager = activity as NavigateManager
     private var appRepository: AppRepository = AppRepository(context)
 
@@ -22,30 +29,32 @@ class BottomSheet(type: Type, activity: Activity, theme: Int, userInfo: UserInfo
             .inflate(R.layout.bottom_share_layout, bottomSheetContainer)
         Type.BOTTOM_DELETE -> LayoutInflater.from(context)
             .inflate(R.layout.bottom_delete_layout, bottomSheetContainer)
+        Type.BOTTOM_SELECT_TO_DELETE -> LayoutInflater.from(context)
+            .inflate(R.layout.bottom_deletes_layout, bottomSheetContainer)
     }
 
     enum class Type {
-        BOTTOM_SHARE, BOTTOM_DELETE
+        BOTTOM_SHARE, BOTTOM_SELECT_TO_DELETE, BOTTOM_DELETE
     }
 
     init {
         setContentView(view)
-        onClick(type, userInfo)
+        onClick()
     }
 
-    private fun onClick(type: Type, userInfo: UserInfo) {
+    private fun onClick() {
         when (type) {
             Type.BOTTOM_SHARE -> {
                 // Share with file
                 view.file.setOnClickListener {
                     dismiss()
-                    Intents.sendVCard(context, userInfo)
+                    Intents.sendVCard(context, listOf(userInfo!!))
                 }
 
                 // Share with text
                 view.text.setOnClickListener {
                     dismiss()
-                    Intents.sendText(context, getUserText(userInfo))
+                    Intents.sendText(context, getUserText(userInfo!!))
                 }
             }
             Type.BOTTOM_DELETE -> {
@@ -57,8 +66,29 @@ class BottomSheet(type: Type, activity: Activity, theme: Int, userInfo: UserInfo
                 // Delete
                 view.move.setOnClickListener {
                     dismiss()
-                    appRepository.deleteUser(userInfo.user.id.toString())
+                    appRepository.deleteUser(userInfo!!.user.id.toString())
                     navController.navigateUp()
+                }
+            }
+            Type.BOTTOM_SELECT_TO_DELETE -> {
+                view.subtitle.text =
+                    if (Locale.getDefault().language == "fa") {
+                        "${users!!.size} ${activity.getString(R.string.deletes)}"
+                    } else {
+                        val text = activity.getString(R.string.deletes)
+                        "${text.substring(0, 4)} ${users!!.size}${text.substring(4, text.length)}"
+                    }
+
+                // Cancel
+                view.cancel.setOnClickListener {
+                    dismiss()
+                }
+
+                // Delete
+                view.move.setOnClickListener {
+                    dismiss()
+                    appRepository.deleteUsers(users.map { it.user.id.toString() })
+                    selectionManager!!.onContactAction(false)
                 }
             }
         }

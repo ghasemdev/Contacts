@@ -49,11 +49,47 @@ class ContactAdapter(
         return selectedContacts
     }
 
-    fun showCheckBox() {
+    fun showCheckBoxes() {
         // show all checkbox
         users.forEach { it.isVisible = true }.also {
             notifyDataSetChanged()
         }
+    }
+
+    fun hideCheckBoxes() {
+        users.apply {
+            filter { it.isVisible }.forEach { it.isVisible = false }
+            filter { it.isSelected }.forEach { it.isSelected = false }
+        }.also { notifyDataSetChanged() }
+    }
+
+    fun selectCheckBoxes() {
+        users.filter { !it.isSelected }.forEach { it.isSelected = true }.also {
+            notifyDataSetChanged()
+        }
+    }
+
+    fun deselectCheckBoxes() {
+        users.filter { it.isSelected }.forEach { it.isSelected = false }.also {
+            notifyDataSetChanged()
+        }
+    }
+
+    fun removeContacts(users: List<UserInfo>) {
+        for (userInfo in users) {
+            for (index in this.users.indices) {
+                if (this.users[index].user.id == userInfo.user.id) {
+                    removeContact(index)
+                    break
+                }
+            }
+        }
+    }
+
+    private fun removeContact(position: Int) {
+        users.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, users.size)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),

@@ -54,6 +54,10 @@ class AppRepository(context: Context) {
         emailDao.deleteByUserId(id)
     }
 
+    fun deleteUsers(ids: List<String>) {
+        ids.forEach { deleteUser(it) }
+    }
+
     fun deleteAllUsers() {
         userDao.deleteAll()
         profileDao.deleteAll()

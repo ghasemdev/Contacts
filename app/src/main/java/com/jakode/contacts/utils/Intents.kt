@@ -100,12 +100,20 @@ object Intents {
         }
     }
 
-    fun sendVCard(context: Context, userInfo: UserInfo) {
-        Intent(Intent.ACTION_SEND).apply {
-            type = "text/x-vcard"
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            putExtra(Intent.EXTRA_STREAM, VCard.getVCard(context, userInfo))
-        }.also { context.startActivity(Intent.createChooser(it, null)) }
+    fun sendVCard(context: Context, usersInfo: List<UserInfo>) {
+        if (usersInfo.size == 1) {
+            Intent(Intent.ACTION_SEND).apply {
+                type = "text/x-vcard"
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                putExtra(Intent.EXTRA_STREAM, VCard.getVCard(context, usersInfo)[0])
+            }.also { context.startActivity(Intent.createChooser(it, null)) }
+        } else {
+            Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                type = "text/x-vcard"
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                putParcelableArrayListExtra(Intent.EXTRA_STREAM, VCard.getVCard(context, usersInfo))
+            }.also { context.startActivity(Intent.createChooser(it, null)) }
+        }
     }
 
     fun sendText(context: Context, text: String) {

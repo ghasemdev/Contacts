@@ -8,40 +8,44 @@ import java.io.File
 import java.io.FileOutputStream
 import java.lang.StringBuilder
 import java.util.*
+import kotlin.collections.ArrayList
 
 object VCard {
-    fun getVCard(context: Context, userInfo: UserInfo): Uri {
-        // Write a vcf file
-        val vcf = File(context.filesDir, "contact.vcf")
-        FileOutputStream(vcf).apply {
-            write(getQuery(userInfo).toByteArray())
-            close()
+    fun getVCard(context: Context, usersInfo: List<UserInfo>): ArrayList<Uri> {
+        val uriList = ArrayList<Uri>()
+        usersInfo.forEach {
+            val name = "${it.user.name.firstName} ${it.user.name.lastName}"
+            val vcf = File(context.filesDir, "$name.vcf")
+            // Write a vcf file
+            FileOutputStream(vcf).apply {
+                write(getQuery(it).toByteArray())
+                close()
+            }
+            // Get content Uri
+            uriList.add(FileProvider.getUriForFile(context,"com.jakode.contacts.FileProvider", vcf))
         }
-
-        // Get content Uri
-        return FileProvider.getUriForFile(context, "com.jakode.contacts.FileProvider", vcf)
+        return uriList
     }
 
     private fun getQuery(userInfo: UserInfo) = "BEGIN:VCARD\n" +
-            "VERSION:4.0\n" +
-            "N:${userInfo.user.name.lastName};${userInfo.user.name.firstName}\n" +
+            "VERSION:3.0\n" +
+            "N:${userInfo.user.name.lastName};${userInfo.user.name.firstName};\n" +
             "FN:${userInfo.user.name.firstName} ${userInfo.user.name.lastName}\n" +
             getPhones(userInfo.phones) +
             getEmails(userInfo.emails) +
             if (userInfo.profile.birthday != null) { "BDAY:${convertDate(userInfo.profile.birthday!!)}\n" } else { "" } +
             if (userInfo.profile.description != null) { "NOTE:${userInfo.profile.description}\n" } else { "" } +
-            "x-qq:21588891\n" +
             "END:VCARD"
 
     private fun getPhones(phones: List<String>): String {
         val builder = StringBuilder()
-        phones.forEach { builder.append("TEL;TYPE=mobile,voice;Phone:$it\n") }
+        phones.forEach { builder.append("TEL;TYPE=Cell:$it\n") }
         return builder.toString()
     }
 
     private fun getEmails(emails: List<String>): String {
         val builder = StringBuilder()
-        emails.forEach { builder.append("EMAIL:$it\n") }
+        emails.forEach { builder.append("EMAIL;TYPE=Home:$it\n") }
         return builder.toString()
     }
 
@@ -55,10 +59,6 @@ object VCard {
                 date[2] = day
             }
         }
-
-        return Calendar.getInstance().run {
-            set(get(Calendar.YEAR), date[1] - 1, date[2], 0, 0, 0)
-            this.timeInMillis
-        }.toString()
+        return "${date[0]}-${date[1]}-${date[2]}"
     }
 }

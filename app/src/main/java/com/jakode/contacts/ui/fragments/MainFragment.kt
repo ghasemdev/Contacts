@@ -36,6 +36,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     private var requireAnimOut = true
 
     private var users = ArrayList<UserInfo>()
+    private lateinit var selectedContacts: List<UserInfo>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -144,6 +145,14 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
             }
         }
 
+        override fun getSwipeDirs(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder
+        ): Int {
+            if (selectionMode) return 0
+            return super.getSwipeDirs(recyclerView, viewHolder)
+        }
+
         override fun onChildDraw( // Set icon and color for swipe
             c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
             dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean
@@ -189,28 +198,43 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
             findNavController().navigate(action)
         }
 
-        // Delete click listener
-        binding.delete.setOnClickListener {
-            val selectedContacts = contactAdapter.getSelectedContacts()
-        }
+        if (users.isNotEmpty()) { // When users empty delete, share and select dos'nt mean
+            // Delete click listener
+            binding.delete.setOnClickListener {
+                selectedContacts = contactAdapter.getSelectedContacts()
+                BottomSheet(
+                    BottomSheet.Type.BOTTOM_SELECT_TO_DELETE,
+                    requireActivity(),
+                    R.style.BottomSheetDialogTheme,
+                    users = selectedContacts,
+                    selectionManager = this
+                ).show()
+            }
 
-        // Share click listener
-        binding.share.setOnClickListener {
-            val selectedContacts = contactAdapter.getSelectedContacts()
-        }
-
-        // Select all button
-        binding.selectAll.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                users.filter { !it.isSelected }.forEach { it.isSelected = true }.also {
-                    contactAdapter.notifyDataSetChanged()
-                }
-            } else {
-                users.filter { it.isSelected }.forEach { it.isSelected = false }.also {
-                    contactAdapter.notifyDataSetChanged()
+            // Share click listener
+            binding.share.setOnClickListener {
+                selectedContacts = contactAdapter.getSelectedContacts()
+                if (selectedContacts.size == 1) {
+                    BottomSheet(
+                        BottomSheet.Type.BOTTOM_SHARE,
+                        requireActivity(),
+                        R.style.BottomSheetDialogTheme,
+                        selectedContacts[0]
+                    ).show()
+                } else {
+                    Intents.sendVCard(requireContext(), selectedContacts)
                 }
             }
-            onContactAction(true)
+
+            // Select all button
+            binding.selectAll.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    contactAdapter.selectCheckBoxes()
+                } else {
+                    contactAdapter.deselectCheckBoxes()
+                }
+                onContactAction(true)
+            }
         }
     }
 
@@ -222,15 +246,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
     override fun onKey(v: View?, keyCode: Int, event: KeyEvent?): Boolean {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (selectionMode) {
-                onContactAction(false)
-                users.apply {
-                    filter { it.isVisible }.forEach { it.isVisible = false }
-                    filter { it.isSelected }.forEach { it.isSelected = false }
-                }.also { contactAdapter.notifyDataSetChanged() }
-            } else {
-                return false
-            }
+            if (selectionMode) onContactAction(false) else return false
         }
         return true
     }
@@ -267,7 +283,6 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
     override var selectionMode: Boolean = false
 
-    @SuppressLint("UseCompatLoadingForDrawables")
     override fun onContactAction(isSelected: Boolean) {
         super.onContactAction(isSelected)
 
@@ -279,7 +294,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
                 requireAnimOut = true
             }
             // Show all checkbox
-            contactAdapter.showCheckBox()
+            contactAdapter.showCheckBoxes()
 
             // Showing selection header
             selectionHeaderShow()
@@ -299,7 +314,18 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
             // Show toolbar item
             toolbarItemShow()
+
+            // Unable selection
+            usersUpdate()
         }
+    }
+
+    private fun usersUpdate() {
+        // remove contacts from recycler
+        val newUsers = appRepository.getAllUsers()
+        if (users.size != newUsers.size) contactAdapter.removeContacts(selectedContacts)
+        if (newUsers.isEmpty()) binding.emptyAlarm.visibility = View.VISIBLE
+        contactAdapter.hideCheckBoxes()
     }
 
     private fun toolbarItemHidden() {
@@ -320,7 +346,8 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         })
 
         // Select all coordinated with body selection
-        when (contactAdapter.getSelectedContacts().size) {
+        selectedContacts = contactAdapter.getSelectedContacts()
+        when (selectedContacts.size) {
             0 -> binding.selectAll.isChecked = false
             users.size -> binding.selectAll.isChecked = true
         }
@@ -341,7 +368,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     }
 
     private fun selectedUser(): String {
-        val selectedContacts = contactAdapter.getSelectedContacts()
+        selectedContacts = contactAdapter.getSelectedContacts()
         return if (selectedContacts.isNotEmpty()) {
             "${selectedContacts.size} ${resources.getString(R.string.selected)}"
         } else {
