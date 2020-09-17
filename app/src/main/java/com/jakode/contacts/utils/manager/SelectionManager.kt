@@ -10,4 +10,5 @@ interface SelectionManager {
     }
 
     fun removeUsers(selectedUser: List<UserInfo>)
+    fun getItemCount(): Int
 }

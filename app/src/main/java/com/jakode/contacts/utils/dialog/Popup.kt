@@ -74,14 +74,22 @@ object PopupMenu {
             Type.MAIN_POPUP -> {
                 popupView.delete.setOnClickListener {
                     popupWindow.dismiss()
-                    selectionManager!!.onContactAction(true)
-                    buttonBox!!.hideShareButton()
+                    if (selectionManager!!.getItemCount() != 0) {
+                        selectionManager!!.onContactAction(true)
+                        buttonBox!!.hideShareButton()
+                    } else {
+                        Toast.makeText(view.context, view.context.getString(R.string.add_first), Toast.LENGTH_SHORT).show()
+                    }
                 }
 
                 popupView.share.setOnClickListener {
                     popupWindow.dismiss()
-                    selectionManager!!.onContactAction(true)
-                    buttonBox!!.hideDeleteButton()
+                    if (selectionManager!!.getItemCount()  != 0) {
+                        selectionManager!!.onContactAction(true)
+                        buttonBox!!.hideDeleteButton()
+                    } else {
+                        Toast.makeText(view.context, view.context.getString(R.string.add_first), Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
             Type.SHOW_USER_POPUP -> {

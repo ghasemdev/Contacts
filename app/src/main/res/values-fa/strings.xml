@@ -14,6 +14,7 @@
     <string name="selected">انتخاب شد</string>
     <string name="all">همه</string>
     <string name="create_group">ایجاد گروه</string>
+    <string name="add_first">اول مخاطبی را به لیست اضافه کنید</string>
 
     <!--Add User Fragment-->
     <string name="name">نام</string>

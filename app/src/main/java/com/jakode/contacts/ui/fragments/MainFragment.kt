@@ -318,6 +318,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     }
 
     override var selectionMode: Boolean = false
+    override fun getItemCount() = users.size
 
     override fun onContactAction(isSelected: Boolean) {
         super.onContactAction(isSelected)
