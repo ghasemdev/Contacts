@@ -1,4 +1,4 @@
-package com.jakode.contacts.utils
+package com.jakode.contacts.utils.dialog
 
 import android.app.Activity
 import android.content.DialogInterface
@@ -65,7 +65,7 @@ object PickerDate : DialogInterface.OnCancelListener, DatePickerDialog.OnDateSet
         dpd!!.dismissOnPause(dismissDateOnPause)
         dpd!!.showYearPickerFirst(showYearFirst)
         dpd!!.version = DatePickerDialog.Version.VERSION_1
-        title?.let { dpd!!.setTitle(this.title) }
+        title?.let { dpd!!.setTitle(title) }
         dpd!!.setOnCancelListener(this)
 
         dpd!!.show(fragmentManager, tag)

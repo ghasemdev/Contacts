@@ -15,6 +15,8 @@ import com.jakode.contacts.adapter.model.Item
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.databinding.FragmentShowUserBinding
 import com.jakode.contacts.utils.*
+import com.jakode.contacts.utils.dialog.BottomSheet
+import com.jakode.contacts.utils.dialog.PopupMenu
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -242,7 +244,15 @@ class ShowUserFragment : Fragment() {
             R.id.show_user_more -> {
                 // Open more options
                 val anchor: View = requireView().findViewById(R.id.show_user_more)
-                PopupMenu.show(PopupMenu.Type.SHOW_USER_POPUP, userInfo, anchor, 0, -125)
+                PopupMenu.show(
+                    PopupMenu.Type.SHOW_USER_POPUP,
+                    userInfo,
+                    anchor,
+                    x = 0,
+                    y = -125,
+                    selectionManager = null,
+                    buttonBox = null
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)

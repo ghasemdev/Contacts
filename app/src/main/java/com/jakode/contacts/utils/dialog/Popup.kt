@@ -1,4 +1,4 @@
-package com.jakode.contacts.utils
+package com.jakode.contacts.utils.dialog
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -10,18 +10,38 @@ import android.widget.PopupWindow
 import android.widget.Toast
 import com.jakode.contacts.R
 import com.jakode.contacts.data.model.UserInfo
+import com.jakode.contacts.utils.manager.SelectionManager
+import com.jakode.contacts.utils.ButtonBox
 import kotlinx.android.synthetic.main.main_popup_layout.view.*
 import kotlinx.android.synthetic.main.selection_popup_layout.view.*
 import kotlinx.android.synthetic.main.show_user_popup_layout.view.*
 
 object PopupMenu {
+    private lateinit var type: Type
+    private lateinit var view: View
+
+    private var userInfo: UserInfo? = null
+    private var selectionManager: SelectionManager? = null
+    private var buttonBox: ButtonBox? = null
+
     enum class Type {
         MAIN_POPUP, SELECTION_MODE_POPUP, SHOW_USER_POPUP
     }
 
     // PopupWindow display method
     @SuppressLint("InflateParams")
-    fun show(type: Type, userInfo: UserInfo?, view: View, x: Int, y: Int) {
+    fun show(
+        type: Type,
+        userInfo: UserInfo?,
+        view: View,
+        x: Int,
+        y: Int,
+        selectionManager: SelectionManager?,
+        buttonBox: ButtonBox?
+    ) {
+        // Initialize
+        initialize(type, userInfo, view, selectionManager, buttonBox)
+
         // Create a View object yourself through inflater
         val inflater =
             view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -46,27 +66,22 @@ object PopupMenu {
         popupWindow.showAsDropDown(view, x, y)
 
         // Initialize the elements of our window, install the handler
-        clickListener(type, userInfo, popupView, popupWindow, view)
+        clickListener(popupView, popupWindow)
     }
 
-    private fun clickListener(
-        type: Type,
-        userInfo: UserInfo?,
-        popupView: View,
-        popupWindow: PopupWindow,
-        view: View
-    ) {
-
+    private fun clickListener(popupView: View, popupWindow: PopupWindow) {
         when (type) {
             Type.MAIN_POPUP -> {
                 popupView.delete.setOnClickListener {
                     popupWindow.dismiss()
-                    Toast.makeText(view.context, "delete", Toast.LENGTH_SHORT).show()
+                    selectionManager!!.onContactAction(true)
+                    buttonBox!!.hideShareButton()
                 }
 
                 popupView.share.setOnClickListener {
                     popupWindow.dismiss()
-                    Toast.makeText(view.context, "share", Toast.LENGTH_SHORT).show()
+                    selectionManager!!.onContactAction(true)
+                    buttonBox!!.hideDeleteButton()
                 }
             }
             Type.SHOW_USER_POPUP -> {
@@ -92,5 +107,19 @@ object PopupMenu {
                 }
             }
         }
+    }
+
+    private fun initialize(
+        type: Type,
+        userInfo: UserInfo?,
+        view: View,
+        selectionManager: SelectionManager?,
+        buttonBox: ButtonBox?
+    ) {
+        this.type = type
+        this.userInfo = userInfo
+        this.view = view
+        this.selectionManager = selectionManager
+        this.buttonBox = buttonBox
     }
 }

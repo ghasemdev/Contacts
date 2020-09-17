@@ -14,7 +14,7 @@ import com.jakode.contacts.R
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.ui.fragments.MainFragmentDirections
 import com.jakode.contacts.utils.ImageUtil
-import com.jakode.contacts.utils.SelectionManager
+import com.jakode.contacts.utils.manager.SelectionManager
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.contact_list_item.view.*
 
@@ -75,21 +75,13 @@ class ContactAdapter(
         }
     }
 
-    fun removeContacts(users: List<UserInfo>) {
-        for (userInfo in users) {
-            for (index in this.users.indices) {
-                if (this.users[index].user.id == userInfo.user.id) {
-                    removeContact(index)
-                    break
-                }
-            }
-        }
+    fun removeContacts(selectedUser: List<UserInfo>) {
+        users.removeAll(selectedUser)
+        notifyDataSetChanged()
     }
 
     private fun removeContact(position: Int) {
         users.removeAt(position)
-        notifyItemRemoved(position)
-        notifyItemRangeChanged(position, users.size)
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
@@ -120,7 +112,7 @@ class ContactAdapter(
                     else context.getDrawable(R.drawable.selected_background)
                 true
             } else {
-                itemView.background = null
+                itemView.setBackgroundResource(android.R.color.transparent)
                 false
             }
 

@@ -1,4 +1,4 @@
-package com.jakode.contacts.utils
+package com.jakode.contacts.utils.dialog
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -8,6 +8,9 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.jakode.contacts.R
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
+import com.jakode.contacts.utils.Intents
+import com.jakode.contacts.utils.manager.NavigateManager
+import com.jakode.contacts.utils.manager.SelectionManager
 import kotlinx.android.synthetic.main.bottom_delete_layout.view.*
 import kotlinx.android.synthetic.main.bottom_share_layout.*
 import kotlinx.android.synthetic.main.bottom_share_layout.view.*
@@ -87,8 +90,9 @@ class BottomSheet(
                 // Delete
                 view.move.setOnClickListener {
                     dismiss()
+                    selectionManager!!.removeUsers(users)
                     appRepository.deleteUsers(users.map { it.user.id.toString() })
-                    selectionManager!!.onContactAction(false)
+                    selectionManager.onContactAction(false)
                 }
             }
         }

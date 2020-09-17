@@ -6,6 +6,8 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.TypedValue
 import android.view.*
 import android.widget.Toast
@@ -23,6 +25,10 @@ import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentMainBinding
 import com.jakode.contacts.utils.*
+import com.jakode.contacts.utils.dialog.BottomSheet
+import com.jakode.contacts.utils.dialog.PopupMenu
+import com.jakode.contacts.utils.manager.DrawerManager
+import com.jakode.contacts.utils.manager.SelectionManager
 import it.xabaras.android.recyclerview.swipedecorator.RecyclerViewSwipeDecorator
 
 class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
@@ -30,6 +36,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     private lateinit var drawerManager: DrawerManager
     private lateinit var appRepository: AppRepository
     private lateinit var contactAdapter: ContactAdapter
+    private lateinit var buttonBox: ButtonBox
 
     // Animation
     private var requireAnimIn = true
@@ -89,6 +96,9 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
         // RecyclerViews
         initRecycler()
+
+        // Init button box
+        buttonBox = ButtonBox(binding.delete, binding.deleteIcon, binding.share, binding.shareIcon)
 
         // Init clickable
         clickListener()
@@ -198,44 +208,55 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
             findNavController().navigate(action)
         }
 
-        if (users.isNotEmpty()) { // When users empty delete, share and select dos'nt mean
-            // Delete click listener
-            binding.delete.setOnClickListener {
-                selectedContacts = contactAdapter.getSelectedContacts()
+        // Delete click listener
+        binding.delete.setOnClickListener {
+            selectedContacts = contactAdapter.getSelectedContacts()
+            BottomSheet(
+                BottomSheet.Type.BOTTOM_SELECT_TO_DELETE,
+                requireActivity(),
+                R.style.BottomSheetDialogTheme,
+                users = selectedContacts,
+                selectionManager = this
+            ).show()
+        }
+
+        // Share click listener
+        binding.share.setOnClickListener {
+            selectedContacts = contactAdapter.getSelectedContacts()
+            if (selectedContacts.size == 1) {
                 BottomSheet(
-                    BottomSheet.Type.BOTTOM_SELECT_TO_DELETE,
+                    BottomSheet.Type.BOTTOM_SHARE,
                     requireActivity(),
                     R.style.BottomSheetDialogTheme,
-                    users = selectedContacts,
-                    selectionManager = this
+                    selectedContacts[0]
                 ).show()
-            }
-
-            // Share click listener
-            binding.share.setOnClickListener {
-                selectedContacts = contactAdapter.getSelectedContacts()
-                if (selectedContacts.size == 1) {
-                    BottomSheet(
-                        BottomSheet.Type.BOTTOM_SHARE,
-                        requireActivity(),
-                        R.style.BottomSheetDialogTheme,
-                        selectedContacts[0]
-                    ).show()
-                } else {
-                    Intents.sendVCard(requireContext(), selectedContacts)
-                }
-            }
-
-            // Select all button
-            binding.selectAll.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    contactAdapter.selectCheckBoxes()
-                } else {
-                    contactAdapter.deselectCheckBoxes()
-                }
-                onContactAction(true)
+            } else {
+                Intents.sendVCard(requireContext(), selectedContacts)
             }
         }
+
+        // Select all button
+        binding.selectAll.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                contactAdapter.selectCheckBoxes()
+            } else {
+                contactAdapter.deselectCheckBoxes()
+            }
+            initSelectionHeader()
+        }
+
+        // Toolbar Text
+        binding.appbar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
+            override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
+                if (selectionMode) {
+                    if (state == State.EXPANDED) { // Open
+                        binding.selectedUsers.visibility = View.GONE
+                    } else if (state == State.COLLAPSED) { // Closed
+                        binding.selectedUsers.visibility = View.VISIBLE
+                    }
+                }
+            }
+        })
     }
 
     private fun onBackPressed(view: View) {
@@ -270,10 +291,25 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
             R.id.more -> {
                 val anchor: View = requireView().findViewById(R.id.more)
                 if (selectionMode) { // Open more options
-                    PopupMenu
-                        .show(PopupMenu.Type.SELECTION_MODE_POPUP, userInfo = null, anchor, 0, -125)
+                    PopupMenu.show(
+                        PopupMenu.Type.SELECTION_MODE_POPUP,
+                        userInfo = null,
+                        anchor,
+                        x = 0,
+                        y = -125,
+                        selectionManager = null,
+                        buttonBox = null
+                    )
                 } else {
-                    PopupMenu.show(PopupMenu.Type.MAIN_POPUP, userInfo = null, anchor, 0, -125)
+                    PopupMenu.show(
+                        PopupMenu.Type.MAIN_POPUP,
+                        userInfo = null,
+                        anchor,
+                        x = 0,
+                        y = -125,
+                        this,
+                        buttonBox
+                    )
                 }
                 true
             }
@@ -316,34 +352,24 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
             toolbarItemShow()
 
             // Unable selection
-            usersUpdate()
+            contactAdapter.hideCheckBoxes()
+
+            // Visible button box
+            Handler(Looper.getMainLooper()).postDelayed({
+                buttonBox.showButtons()
+            }, 200)
         }
     }
 
-    private fun usersUpdate() {
-        // remove contacts from recycler
-        val newUsers = appRepository.getAllUsers()
-        if (users.size != newUsers.size) contactAdapter.removeContacts(selectedContacts)
-        if (newUsers.isEmpty()) binding.emptyAlarm.visibility = View.VISIBLE
-        contactAdapter.hideCheckBoxes()
+    override fun removeUsers(selectedUser: List<UserInfo>) {
+        if (users.size == selectedUser.size) binding.emptyAlarm.visibility = View.VISIBLE
+        contactAdapter.removeContacts(selectedUser)
     }
 
     private fun toolbarItemHidden() {
         binding.toolbar.navigationIcon = null
         binding.selectAll.visibility = View.VISIBLE
         binding.checkboxText.visibility = View.VISIBLE
-
-        // Toolbar Text
-        binding.appbar.addOnOffsetChangedListener(object : AppBarStateChangeListener() {
-            override fun onStateChanged(appBarLayout: AppBarLayout?, state: State?) {
-                if (state == State.EXPANDED) { // Open
-                    binding.selectedUsers.visibility = View.GONE
-                } else if (state == State.COLLAPSED) { // Closed
-                    binding.selectedUsers.visibility = View.VISIBLE
-                    binding.selectedUsers.text = selectedUser()
-                }
-            }
-        })
 
         // Select all coordinated with body selection
         selectedContacts = contactAdapter.getSelectedContacts()
@@ -357,6 +383,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun toolbarItemShow() {
         binding.toolbar.navigationIcon = requireContext().getDrawable(R.drawable.ic_menu)
+        binding.selectAll.isChecked = false
         binding.selectAll.visibility = View.GONE
         binding.checkboxText.visibility = View.GONE
         binding.selectedUsers.visibility = View.GONE
@@ -365,6 +392,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
     private fun initSelectionHeader() {
         binding.toolbarHeaderSelection.contactSelect.text = selectedUser()
+        binding.selectedUsers.text = selectedUser()
     }
 
     private fun selectedUser(): String {

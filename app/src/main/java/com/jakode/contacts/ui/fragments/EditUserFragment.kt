@@ -26,7 +26,7 @@ import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentEditUserBinding
 import com.jakode.contacts.utils.ImageUtil
-import com.jakode.contacts.utils.PickerDate
+import com.jakode.contacts.utils.dialog.PickerDate
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import java.util.*
 import kotlin.collections.ArrayList
