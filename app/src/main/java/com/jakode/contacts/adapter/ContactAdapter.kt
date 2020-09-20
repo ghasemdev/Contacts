@@ -20,7 +20,7 @@ import kotlinx.android.synthetic.main.contact_list_item.view.*
 
 class ContactAdapter(
     private val users: ArrayList<UserInfo>,
-    val selectionManager: SelectionManager
+    val selectionManager: SelectionManager? = null
 ) :
     RecyclerView.Adapter<ContactAdapter.ViewHolder>() {
     private lateinit var context: Context
@@ -80,10 +80,6 @@ class ContactAdapter(
         notifyDataSetChanged()
     }
 
-    private fun removeContact(position: Int) {
-        users.removeAt(position)
-    }
-
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
         View.OnClickListener, View.OnLongClickListener {
         val cover: RoundedImageView by lazy { itemView.contact_cover }
@@ -128,7 +124,8 @@ class ContactAdapter(
         }
 
         private fun name(userInfo: UserInfo) {
-            val name = "${userInfo.user.name.firstName} ${userInfo.user.name.lastName}"
+            val (firstName,lastName) = userInfo.user.name.split(";;")
+            val name = "$firstName $lastName"
             this.name.text = name
         }
 
@@ -143,7 +140,7 @@ class ContactAdapter(
         }
 
         override fun onClick(view: View?) {
-            if (selectionManager.selectionMode) {
+            if (selectionManager!!.selectionMode) {
                 multiSelection()
             } else {
                 val action =
@@ -165,7 +162,7 @@ class ContactAdapter(
                 checkBox.isChecked = true
                 users[adapterPosition].isSelected = true
             }
-            selectionManager.onContactAction(true)
+            selectionManager!!.onContactAction(true)
         }
     }
 }

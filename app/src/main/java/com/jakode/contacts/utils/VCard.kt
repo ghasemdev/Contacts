@@ -11,10 +11,17 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 object VCard {
+    private lateinit var firstName: String
+    private lateinit var lastName: String
+
     fun getVCard(context: Context, usersInfo: List<UserInfo>): ArrayList<Uri> {
         val uriList = ArrayList<Uri>()
         usersInfo.forEach {
-            val name = "${it.user.name.firstName} ${it.user.name.lastName}"
+            val (firstName, lastName) = it.user.name.split(";;")
+            this.firstName = firstName
+            this.lastName = lastName
+
+            val name = "$firstName $lastName"
             val vcf = File(context.filesDir, "$name.vcf")
             // Write a vcf file
             FileOutputStream(vcf).apply {
@@ -29,8 +36,8 @@ object VCard {
 
     private fun getQuery(userInfo: UserInfo) = "BEGIN:VCARD\n" +
             "VERSION:3.0\n" +
-            "N:${userInfo.user.name.lastName};${userInfo.user.name.firstName};\n" +
-            "FN:${userInfo.user.name.firstName} ${userInfo.user.name.lastName}\n" +
+            "N:$lastName;$firstName;\n" +
+            "FN:$firstName $lastName\n" +
             getPhones(userInfo.phones) +
             getEmails(userInfo.emails) +
             if (userInfo.profile.birthday != null) { "BDAY:${convertDate(userInfo.profile.birthday!!)}\n" } else { "" } +

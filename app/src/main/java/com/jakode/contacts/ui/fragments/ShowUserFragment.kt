@@ -14,7 +14,9 @@ import com.jakode.contacts.adapter.PhoneAdapter
 import com.jakode.contacts.adapter.model.Item
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.databinding.FragmentShowUserBinding
-import com.jakode.contacts.utils.*
+import com.jakode.contacts.utils.DateConverter
+import com.jakode.contacts.utils.ImageUtil
+import com.jakode.contacts.utils.Intents
 import com.jakode.contacts.utils.dialog.BottomSheet
 import com.jakode.contacts.utils.dialog.PopupMenu
 import java.util.*
@@ -105,8 +107,8 @@ class ShowUserFragment : Fragment() {
 
     private fun footerOnClick() {
         binding.birthdayIcon.setOnClickListener {
-            val title = "${requireContext().getString(R.string.birthday)} " +
-                    "${userInfo.user.name.firstName} ${userInfo.user.name.lastName}"
+            val (firstName, lastName) = userInfo.user.name.split(";;")
+            val title = "${requireContext().getString(R.string.birthday)} " + "$firstName $lastName"
             val time = convertDate(userInfo.profile.birthday!!)
 
             Intents.addEvent(requireContext(), title, "", "", time, time)
@@ -163,8 +165,9 @@ class ShowUserFragment : Fragment() {
     }
 
     private fun name() {
-        binding.firstName.text = userInfo.user.name.firstName
-        binding.lastName.text = userInfo.user.name.lastName
+        val (firstName, lastName) = userInfo.user.name.split(";;")
+        binding.firstName.text = firstName
+        binding.lastName.text = lastName
     }
 
     private fun phone() {
@@ -244,12 +247,20 @@ class ShowUserFragment : Fragment() {
             R.id.show_user_more -> {
                 // Open more options
                 val anchor: View = requireView().findViewById(R.id.show_user_more)
+                val x: Int
+                val y: Int
+                if (Locale.getDefault().language == "fa") {
+                    x = -120
+                    y = -125
+                } else {
+                    x = 0
+                    y = -125
+                }
                 PopupMenu.show(
                     PopupMenu.Type.SHOW_USER_POPUP,
                     userInfo,
                     anchor,
-                    x = 0,
-                    y = -125,
+                    x, y,
                     selectionManager = null,
                     buttonBox = null
                 )

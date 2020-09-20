@@ -90,8 +90,12 @@ class BottomSheet(
                 // Delete
                 view.move.setOnClickListener {
                     dismiss()
-                    selectionManager!!.removeUsers(users)
-                    appRepository.deleteUsers(users.map { it.user.id.toString() })
+                    selectionManager!!.removeUsers(users) // Clear from recycler
+                    if (selectionManager.getItemCount() == users.size) {
+                        appRepository.deleteAllUsers()
+                    } else {
+                        appRepository.deleteUsers(users.map { it.user.id.toString() })
+                    }
                     selectionManager.onContactAction(false)
                 }
             }
@@ -99,7 +103,8 @@ class BottomSheet(
     }
 
     private fun getUserText(userInfo: UserInfo): String {
-        return "[${getName()}] ${userInfo.user.name.firstName} ${userInfo.user.name.lastName}\n" +
+        val (firstName, lastName) = userInfo.user.name.split(";;")
+        return "[${getName()}] $firstName $lastName\n" +
                 getPhones(userInfo.phones) +
                 getEmails(userInfo.emails) +
                 if (userInfo.profile.birthday != null) {

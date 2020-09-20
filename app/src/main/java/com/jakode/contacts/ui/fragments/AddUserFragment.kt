@@ -19,7 +19,6 @@ import com.jakode.contacts.R
 import com.jakode.contacts.adapter.EmailAdapter
 import com.jakode.contacts.adapter.PhoneAdapter
 import com.jakode.contacts.adapter.model.Item
-import com.jakode.contacts.data.model.Name
 import com.jakode.contacts.data.model.Profile
 import com.jakode.contacts.data.model.User
 import com.jakode.contacts.data.model.UserInfo
@@ -117,7 +116,7 @@ class AddUserFragment : Fragment(), TextWatcher {
         val isTrash = false
 
         val user = UserInfo( // Build user object
-            User(Name(firstName, lastName), isBlock, isTrash),
+            User("$firstName;;$lastName", isBlock, isTrash),
             Profile(
                 imageUri?.let { saveImage() } ?: imageDefault,
                 birthday,

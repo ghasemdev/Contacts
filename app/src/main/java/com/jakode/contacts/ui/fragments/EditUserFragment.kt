@@ -133,10 +133,7 @@ class EditUserFragment : Fragment(), TextWatcher, View.OnKeyListener {
             .filter { it.isNotEmpty() }.toList() else emailsList.map { it.item }
 
         userInfo.apply {
-            user.name.apply {
-                this.firstName = firstName
-                this.lastName = lastName
-            }
+            user.name = "$firstName;;$lastName"
             profile.apply {
                 this.cover = imageUri?.let { saveImage() } ?: imageDefault
                 this.birthday = birthday
@@ -310,8 +307,9 @@ class EditUserFragment : Fragment(), TextWatcher, View.OnKeyListener {
     }
 
     private fun name() {
-        binding.firstName.setText(userInfo.user.name.firstName)
-        binding.lastName.setText(userInfo.user.name.lastName)
+        val (firstName, lastName) = userInfo.user.name.split(";;")
+        binding.firstName.setText(firstName)
+        binding.lastName.setText(lastName)
     }
 
     private fun birthday() {

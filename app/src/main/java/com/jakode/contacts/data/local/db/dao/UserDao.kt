@@ -36,8 +36,8 @@ interface UserDao : BaseDao<User> {
     fun getUserAndProfile(id: String): UserAndProfile
 
     @Transaction
-    @Query("SELECT * FROM users WHERE first_name LIKE :firstName or last_name LIKE :lastName")
-    fun getUsersAndProfileByName(firstName: String, lastName: String): List<UserAndProfile>
+    @Query("SELECT * FROM users WHERE name LIKE :name")
+    fun getUsersAndProfileByName(name: String): List<UserAndProfile>
 
     @Transaction
     @Query("SELECT * FROM users WHERE is_block = 0")
@@ -65,8 +65,8 @@ interface UserDao : BaseDao<User> {
     fun getUserWithPhones(id: String): UserWithPhones
 
     @Transaction
-    @Query("SELECT * FROM users WHERE first_name LIKE :firstName or last_name LIKE :lastName")
-    fun getUsersWithPhonesByName(firstName: String, lastName: String): List<UserWithPhones>
+    @Query("SELECT * FROM users WHERE name LIKE :name")
+    fun getUsersWithPhonesByName(name: String): List<UserWithPhones>
 
     //------------------------------------------------------------------------------------------
     @Transaction
@@ -78,6 +78,6 @@ interface UserDao : BaseDao<User> {
     fun getUserWithEmails(id: String): UserWithEmails
 
     @Transaction
-    @Query("SELECT * FROM users WHERE first_name LIKE :firstName or last_name LIKE :lastName")
-    fun getUsersWithEmailsByName(firstName: String, lastName: String): List<UserWithEmails>
+    @Query("SELECT * FROM users WHERE name LIKE :name")
+    fun getUsersWithEmailsByName(name: String): List<UserWithEmails>
 }
