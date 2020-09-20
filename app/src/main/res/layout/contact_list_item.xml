@@ -35,6 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
+        android:textColor="@color/color_secondary_text"
         app:layout_constraintBottom_toTopOf="@+id/contact_phone"
         app:layout_constraintStart_toEndOf="@+id/contact_cover"
         app:layout_constraintTop_toTopOf="@+id/contact_cover"
