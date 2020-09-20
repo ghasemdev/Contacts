@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity(), DrawerManager, NavigateManager {
                 R.id.recentFragment -> {
                     lockDrawer()
                 }
-                R.id.searchFragment -> {
+                R.id.searchActivity -> {
                     lockDrawer()
                 }
                 R.id.showUserFragment -> {

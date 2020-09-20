@@ -84,7 +84,7 @@ class AppRepository(context: Context) {
             )
             index++
         }
-        list.sortBy { it.user.name.firstName }
+        list.sortBy { it.user.name }
         return list
     }
 
@@ -92,34 +92,78 @@ class AppRepository(context: Context) {
     private fun getAllUsersWithPhones() = userDao.getAllUsersWithPhones()
     private fun getAllUsersWithEmails() = userDao.getAllUsersWithEmails()
 
-    fun findUserById(id: String) = userDao.getUserAndProfile(id)
-    fun findUserWithPhonesById(id: String) = userDao.getUserWithPhones(id)
-    fun findUserWithEmailsById(id: String) = userDao.getUserWithEmails(id)
-
-    fun findUsersByName(name: Name): List<UserAndProfile> {
-        val firstName = "${name.firstName}%"
-        val lastName = "%${name.lastName}"
-        return userDao.getUsersAndProfileByName(firstName, lastName)
+    fun findUsers(query: String): ArrayList<UserInfo> {
+        return when {
+            isNumber(query) -> findUserByPhone(query)
+            else -> findUsersByName(query)
+        }
     }
 
-    fun findUsersWithPhonesByName(name: Name): List<UserWithPhones> {
-        val firstName = "${name.firstName}%"
-        val lastName = "%${name.lastName}"
-        return userDao.getUsersWithPhonesByName(firstName, lastName)
-    }
+    fun findUsersByName(query: String): ArrayList<UserInfo> {
+        val list = ArrayList<UserInfo>()
 
-    fun findUsersWithEmailsByName(name: Name): List<UserWithEmails> {
-        val firstName = "${name.firstName}%"
-        val lastName = "%${name.lastName}"
-        return userDao.getUsersWithEmailsByName(firstName, lastName)
-    }
-
-    fun findUserByPhone(number: String): List<UserAndProfile> {
-        val list = ArrayList<UserAndProfile>()
-        for (phone in phoneDao.getByPhone(number))
-            list.add(findUserById(phone.userId.toString()))
+        var index = 0
+        findUsersAndProfiles(query).forEach {
+            list.add(
+                UserInfo(
+                    it.user,
+                    it.profile,
+                    phoneToString(findUsersWithPhones(query)[index].phones),
+                    emailToString(findUsersWithEmails(query)[index].emails)
+                )
+            )
+            index++
+        }
+        list.sortBy { it.user.name }
         return list
     }
+
+    private fun findUsersAndProfiles(query: String): List<UserAndProfile> {
+        val name = "%${query.replaceFirst(" ", ";;")}%"
+        return userDao.getUsersAndProfileByName(name)
+    }
+
+    private fun findUsersWithPhones(query: String): List<UserWithPhones> {
+        val name = "%${query.replaceFirst(" ", ";;")}%"
+        return userDao.getUsersWithPhonesByName(name)
+    }
+
+    private fun findUsersWithEmails(query: String): List<UserWithEmails> {
+        val name = "%${query.replaceFirst(" ", ";;")}%"
+        return userDao.getUsersWithEmailsByName(name)
+    }
+
+    fun findUserByPhone(query: String): ArrayList<UserInfo> {
+        fun getPhones(userId: String, phone: Phone): ArrayList<Phone> {
+            val phones = findUserWithPhonesById(userId).phones as ArrayList
+            phones.remove(phone)
+            phones.add(0, phone)
+            return phones
+        }
+
+        val list = ArrayList<UserInfo>()
+
+        val number = "%$query%"
+        for (phone in phoneDao.getByPhone(number)) {
+            val userId = phone.userId.toString()
+            val userAndProfile = findUserById(userId)
+
+            list.add(
+                UserInfo(
+                    userAndProfile.user,
+                    userAndProfile.profile,
+                    phoneToString(getPhones(userId, phone)),
+                    emailToString(findUserWithEmailsById(userId).emails)
+                )
+            )
+        }
+        list.sortBy { it.user.name }
+        return list
+    }
+
+    private fun findUserById(id: String) = userDao.getUserAndProfile(id)
+    private fun findUserWithPhonesById(id: String) = userDao.getUserWithPhones(id)
+    private fun findUserWithEmailsById(id: String) = userDao.getUserWithEmails(id)
 
     fun findUsersByBlock(boolean: Boolean): List<UserAndProfile> {
         return when (boolean) {
@@ -202,5 +246,17 @@ class AppRepository(context: Context) {
     private fun getUserId(): Long {
         val users = userDao.getAllUsers()
         return users[users.size - 1].id
+    }
+
+    private fun isNumber(query: String): Boolean {
+        var state = true
+        for (char in query) {
+            val ascii = char.toInt()
+            if (ascii < 48 || ascii > 57) {
+                state = false
+                break
+            }
+        }
+        return state
     }
 }

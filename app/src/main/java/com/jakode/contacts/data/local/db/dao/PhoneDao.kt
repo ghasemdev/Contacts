@@ -23,6 +23,6 @@ interface PhoneDao : BaseDao<Phone> {
     @Query("DELETE FROM phones")
     fun deleteAll()
 
-    @Query("SELECT * FROM phones WHERE number = :phone")
+    @Query("SELECT * FROM phones WHERE number LIKE :phone")
     fun getByPhone(phone: String): List<Phone>
 }

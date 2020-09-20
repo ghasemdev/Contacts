@@ -54,6 +54,16 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        // Init list of users
+        users = appRepository.getAllUsers()
+        if (users.isEmpty()) binding.emptyAlarm.visibility = View.VISIBLE
+
+        // RecyclerViews
+        initRecycler()
+    }
+    
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -283,7 +293,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
                 if (selectionMode) {
                     Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
                 } else {
-                    val action = MainFragmentDirections.actionMainFragmentToSearchFragment()
+                    val action = MainFragmentDirections.actionMainFragmentToSearchActivity()
                     findNavController().navigate(action)
                 }
                 true
