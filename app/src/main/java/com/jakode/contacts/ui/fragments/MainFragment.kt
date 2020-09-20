@@ -10,7 +10,6 @@ import android.os.Handler
 import android.os.Looper
 import android.util.TypedValue
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -63,7 +62,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         // RecyclerViews
         initRecycler()
     }
-    
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -107,11 +106,11 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         // RecyclerViews
         initRecycler()
 
-        // Init button box
-        buttonBox = ButtonBox(binding.delete, binding.deleteIcon, binding.share, binding.shareIcon)
-
         // Init clickable
         clickListener()
+
+        // Init button box
+        buttonBox = ButtonBox(binding.delete, binding.deleteIcon, binding.share, binding.shareIcon)
     }
 
     private fun initRecycler() {
@@ -221,27 +220,31 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         // Delete click listener
         binding.delete.setOnClickListener {
             selectedContacts = contactAdapter.getSelectedContacts()
-            BottomSheet(
-                BottomSheet.Type.BOTTOM_SELECT_TO_DELETE,
-                requireActivity(),
-                R.style.BottomSheetDialogTheme,
-                users = selectedContacts,
-                selectionManager = this
-            ).show()
+            if (selectedContacts.isNotEmpty()) {
+                BottomSheet(
+                    BottomSheet.Type.BOTTOM_SELECT_TO_DELETE,
+                    requireActivity(),
+                    R.style.BottomSheetDialogTheme,
+                    users = selectedContacts,
+                    selectionManager = this
+                ).show()
+            }
         }
 
         // Share click listener
         binding.share.setOnClickListener {
             selectedContacts = contactAdapter.getSelectedContacts()
-            if (selectedContacts.size == 1) {
-                BottomSheet(
-                    BottomSheet.Type.BOTTOM_SHARE,
-                    requireActivity(),
-                    R.style.BottomSheetDialogTheme,
-                    selectedContacts[0]
-                ).show()
-            } else {
-                Intents.sendVCard(requireContext(), selectedContacts)
+            if (selectedContacts.isNotEmpty()) {
+                if (selectedContacts.size == 1) {
+                    BottomSheet(
+                        BottomSheet.Type.BOTTOM_SHARE,
+                        requireActivity(),
+                        R.style.BottomSheetDialogTheme,
+                        selectedContacts[0]
+                    ).show()
+                } else {
+                    Intents.sendVCard(requireContext(), selectedContacts)
+                }
             }
         }
 
@@ -290,12 +293,8 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.search -> {
-                if (selectionMode) {
-                    Toast.makeText(requireContext(), "search", Toast.LENGTH_SHORT).show()
-                } else {
-                    val action = MainFragmentDirections.actionMainFragmentToSearchActivity()
-                    findNavController().navigate(action)
-                }
+                val action = MainFragmentDirections.actionMainFragmentToSearchActivity()
+                findNavController().navigate(action)
                 true
             }
             R.id.more -> {
@@ -373,20 +372,21 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     }
 
     override fun removeUsers(selectedUser: List<UserInfo>) {
-        if (users.size == selectedUser.size) binding.emptyAlarm.visibility = View.VISIBLE
+        if (getItemCount() == selectedUser.size) binding.emptyAlarm.visibility = View.VISIBLE
         contactAdapter.removeContacts(selectedUser)
     }
 
     private fun toolbarItemHidden() {
         binding.toolbar.navigationIcon = null
-        binding.selectAll.visibility = View.VISIBLE
-        binding.checkboxText.visibility = View.VISIBLE
+        binding.toolbar.menu.getItem(0).isVisible = false
+        binding.selection.visibility = View.VISIBLE
+        binding.selectedUsers.visibility = View.GONE
 
         // Select all coordinated with body selection
         selectedContacts = contactAdapter.getSelectedContacts()
         when (selectedContacts.size) {
             0 -> binding.selectAll.isChecked = false
-            users.size -> binding.selectAll.isChecked = true
+            getItemCount() -> binding.selectAll.isChecked = true
         }
         drawerManager.lockDrawer()
     }
@@ -394,10 +394,9 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun toolbarItemShow() {
         binding.toolbar.navigationIcon = requireContext().getDrawable(R.drawable.ic_menu)
+        binding.toolbar.menu.getItem(0).isVisible = true
         binding.selectAll.isChecked = false
-        binding.selectAll.visibility = View.GONE
-        binding.checkboxText.visibility = View.GONE
-        binding.selectedUsers.visibility = View.GONE
+        binding.selection.visibility = View.GONE
         drawerManager.unlockDrawer()
     }
 

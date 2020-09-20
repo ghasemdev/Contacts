@@ -9,8 +9,10 @@ import com.jakode.contacts.databinding.ActivitySearchBinding
 import com.jakode.contacts.utils.manager.NavigateManager
 import com.jakode.contacts.utils.manager.OnBackPressedListener
 
-class SearchActivity : AppCompatActivity(), NavigateManager, OnBackPressedListener {
+class SearchActivity : AppCompatActivity(), NavigateManager{
     private lateinit var binding: ActivitySearchBinding
+    private lateinit var onBackPressedListener: OnBackPressedListener
+
     private val navController by lazy {
         findNavController(R.id.fragment)
     }
@@ -26,11 +28,15 @@ class SearchActivity : AppCompatActivity(), NavigateManager, OnBackPressedListen
         setIntent(intent)
     }
 
-    override fun doBack() {
+    override fun navigateUp() {
         onBackPressed()
     }
 
-    override fun navigateUp() {
-        onBackPressed()
+    fun setIoBack(onBackPressedListener: OnBackPressedListener) {
+        this.onBackPressedListener = onBackPressedListener
+    }
+
+    override fun onBackPressed() {
+        if (onBackPressedListener.onBackPressed()) super.onBackPressed()
     }
 }

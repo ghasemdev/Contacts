@@ -1,5 +1,6 @@
 package com.jakode.contacts.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.graphics.Color
@@ -19,10 +20,14 @@ import com.jakode.contacts.R
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.ui.fragments.SearchFragmentDirections
 import com.jakode.contacts.utils.ImageUtil
+import com.jakode.contacts.utils.manager.SelectionManager
 import com.makeramen.roundedimageview.RoundedImageView
 import kotlinx.android.synthetic.main.contact_list_item.view.*
 
-class SearchAdapter(private var users: ArrayList<UserInfo>) :
+class SearchAdapter(
+    private var users: ArrayList<UserInfo>,
+    val selectionManager: SelectionManager? = null
+) :
     RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
     private lateinit var context: Context
 
@@ -41,6 +46,7 @@ class SearchAdapter(private var users: ArrayList<UserInfo>) :
 
         // Onclick listener
         holder.itemView.setOnClickListener(holder)
+        holder.itemView.setOnLongClickListener(holder)
     }
 
     override fun getItemCount() = users.size
@@ -51,8 +57,45 @@ class SearchAdapter(private var users: ArrayList<UserInfo>) :
         notifyDataSetChanged()
     }
 
+    fun getSelectedContacts(): List<UserInfo> {
+        val selectedContacts = ArrayList<UserInfo>()
+        users.filter { it.isSelected }.forEach { selectedContacts.add(it) }
+        return selectedContacts
+    }
+
+    fun showCheckBoxes() {
+        // show all checkbox
+        users.forEach { it.isVisible = true }.also {
+            notifyDataSetChanged()
+        }
+    }
+
+    fun hideCheckBoxes() {
+        users.apply {
+            filter { it.isVisible }.forEach { it.isVisible = false }
+            filter { it.isSelected }.forEach { it.isSelected = false }
+        }.also { notifyDataSetChanged() }
+    }
+
+    fun selectCheckBoxes() {
+        users.filter { !it.isSelected }.forEach { it.isSelected = true }.also {
+            notifyDataSetChanged()
+        }
+    }
+
+    fun deselectCheckBoxes() {
+        users.filter { it.isSelected }.forEach { it.isSelected = false }.also {
+            notifyDataSetChanged()
+        }
+    }
+
+    fun removeContacts(selectedUser: List<UserInfo>) {
+        users.removeAll(selectedUser)
+        notifyDataSetChanged()
+    }
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView),
-        View.OnClickListener {
+        View.OnClickListener, View.OnLongClickListener {
         val cover: RoundedImageView by lazy { itemView.contact_cover }
         val divider: View by lazy { itemView.divider }
         val checkBox: CheckBox by lazy { itemView.checkBox }
@@ -67,11 +110,32 @@ class SearchAdapter(private var users: ArrayList<UserInfo>) :
             name(userInfo)
             // Phone
             phone(userInfo)
+            // Checkbox
+            initSelectionOption(userInfo)
+        }
+
+        @SuppressLint("UseCompatLoadingForDrawables")
+        private fun initSelectionOption(userInfo: UserInfo) {
+            checkBox.isChecked = if (userInfo.isSelected) {
+                itemView.background =
+                    if (adapterPosition == 0) context.getDrawable(R.drawable.selected_top_background)
+                    else context.getDrawable(R.drawable.selected_background)
+                true
+            } else {
+                itemView.setBackgroundResource(android.R.color.transparent)
+                false
+            }
+
+            checkBox.visibility = if (userInfo.isVisible) {
+                View.VISIBLE
+            } else {
+                View.GONE
+            }
         }
 
         private fun phone(userInfo: UserInfo) {
             val phone = userInfo.phones[0]
-            if (isNumber(query!!)) {
+            if (isNumber(query!!)) { // Is a number highlight
                 val start = phone.indexOf(query!!)
                 SpannableString(phone).apply {
                     val fcs = ForegroundColorSpan(Color.parseColor("#E53935"))
@@ -86,7 +150,7 @@ class SearchAdapter(private var users: ArrayList<UserInfo>) :
             val (firstName, lastName) = userInfo.user.name.split(";;")
             val name = "$firstName $lastName"
             // Set text and color that
-            if (!isNumber(query!!)) {
+            if (!isNumber(query!!)) { // Is a name highlight
                 val start = name.indexOf(query!!)
                 SpannableString(name).apply {
                     val fcs = ForegroundColorSpan(Color.parseColor("#E53935"))
@@ -108,10 +172,14 @@ class SearchAdapter(private var users: ArrayList<UserInfo>) :
         }
 
         override fun onClick(view: View?) {
-            hideKeyboard(context, view!!)
-            val action =
-                SearchFragmentDirections.actionSearchFragmentToShowUserFragment(users[adapterPosition])
-            view.findNavController().navigate(action)
+            if (selectionManager!!.selectionMode) {
+                multiSelection()
+            } else {
+                hideKeyboard(context, view!!)
+                val action =
+                    SearchFragmentDirections.actionSearchFragmentToShowUserFragment(users[adapterPosition])
+                view.findNavController().navigate(action)
+            }
         }
 
         private fun hideKeyboard(context: Context, view: View) {
@@ -129,6 +197,23 @@ class SearchAdapter(private var users: ArrayList<UserInfo>) :
                 }
             }
             return state
+        }
+
+        override fun onLongClick(view: View?): Boolean {
+            hideKeyboard(context, view!!)
+            multiSelection()
+            return true
+        }
+
+        private fun multiSelection() {
+            if (users[adapterPosition].isSelected) {
+                checkBox.isChecked = false
+                users[adapterPosition].isSelected = false
+            } else {
+                checkBox.isChecked = true
+                users[adapterPosition].isSelected = true
+            }
+            selectionManager!!.onContactAction(true)
         }
     }
 }
