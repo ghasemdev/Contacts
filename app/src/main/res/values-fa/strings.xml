@@ -15,6 +15,9 @@
     <string name="all">همه</string>
     <string name="create_group">ایجاد گروه</string>
     <string name="add_first">اول مخاطبی را به لیست اضافه کنید</string>
+    <string name="contact_find">مخاطب پیدا شد</string>
+    <string name="empty_recent_search">جست و جوی اخیر وجود ندارد</string>
+    <string name="empty_search">نتیجه ای یافت نشد</string>
 
     <!--Add User Fragment-->
     <string name="name">نام</string>
@@ -43,5 +46,8 @@
     <string name="delete_title">این مخاطب به سطل زباله منتقل شود؟</string>
     <string name="delete_subtitle">این مخاطب به مدت 30 روز در سطل زباله نگهداری خواهد شد.</string>
     <string name="move">حذف</string>
+
+    <!--Search Fragment-->
+    <string name="search_hint">دنبال چی میگردی ؟</string>
 
 </resources>
