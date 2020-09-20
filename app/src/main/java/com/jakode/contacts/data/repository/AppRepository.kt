@@ -2,10 +2,7 @@ package com.jakode.contacts.data.repository
 
 import android.content.Context
 import com.jakode.contacts.data.local.db.AppDataBase
-import com.jakode.contacts.data.local.db.dao.EmailDao
-import com.jakode.contacts.data.local.db.dao.PhoneDao
-import com.jakode.contacts.data.local.db.dao.ProfileDao
-import com.jakode.contacts.data.local.db.dao.UserDao
+import com.jakode.contacts.data.local.db.dao.*
 import com.jakode.contacts.data.model.*
 
 class AppRepository(context: Context) {
@@ -13,6 +10,7 @@ class AppRepository(context: Context) {
     private var profileDao: ProfileDao
     private var phoneDao: PhoneDao
     private var emailDao: EmailDao
+    private var searchDao: SearchDao
 
     init {
         val db = AppDataBase.getInstance(context)
@@ -20,6 +18,7 @@ class AppRepository(context: Context) {
         profileDao = db.profileDao()
         phoneDao = db.phoneDao()
         emailDao = db.emailDao()
+        searchDao = db.searchDao()
     }
 
     fun insertUser(user: UserInfo): Long {
@@ -164,6 +163,17 @@ class AppRepository(context: Context) {
     private fun findUserById(id: String) = userDao.getUserAndProfile(id)
     private fun findUserWithPhonesById(id: String) = userDao.getUserWithPhones(id)
     private fun findUserWithEmailsById(id: String) = userDao.getUserWithEmails(id)
+
+    fun insertSearch(search: Search) {
+        searchDao.getByQuery(search.query)?.let {
+            deleteRowSearch(it)
+        }
+        searchDao.insert(search)
+    }
+
+    fun deleteRowSearch(search: Search) = searchDao.delete(search)
+    fun deleteAllSearch() = searchDao.deleteAll()
+    fun getAllSearch() = searchDao.getAllSearch().reversed()
 
     fun findUsersByBlock(boolean: Boolean): List<UserAndProfile> {
         return when (boolean) {

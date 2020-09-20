@@ -17,6 +17,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakode.contacts.R
 import com.jakode.contacts.adapter.SearchAdapter
+import com.jakode.contacts.adapter.SearchHistoryAdapter
+import com.jakode.contacts.data.model.Search
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentSearchBinding
@@ -26,14 +28,16 @@ import com.jakode.contacts.utils.Intents
 import com.jakode.contacts.utils.dialog.BottomSheet
 import com.jakode.contacts.utils.dialog.PopupMenu
 import com.jakode.contacts.utils.manager.OnBackPressedListener
+import com.jakode.contacts.utils.manager.SearchHistoryManager
 import com.jakode.contacts.utils.manager.SelectionManager
 import java.util.*
 import kotlin.collections.ArrayList
 
-class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
+class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener, SearchHistoryManager {
     private lateinit var binding: FragmentSearchBinding
     private lateinit var appRepository: AppRepository
     private lateinit var searchAdapter: SearchAdapter
+    private lateinit var searchHistoryAdapter: SearchHistoryAdapter
     private lateinit var buttonBox: ButtonBox
 
     // Animation
@@ -41,6 +45,7 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
     private var requireAnimOut = true
 
     private var users = ArrayList<UserInfo>()
+    private var searchList = ArrayList<Search>()
     private lateinit var selectedContacts: List<UserInfo>
 
     override fun onAttach(context: Context) {
@@ -81,11 +86,21 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
         // Init repository
         appRepository = AppRepository(requireContext())
 
+        // Init recent search
+        val list = appRepository.getAllSearch()
+        list.forEach { searchList.add(it) }
+
         // Init searchView
         initSearchView()
 
         // Search list
         initRecycler()
+
+        if (searchList.isNotEmpty()) {
+            binding.errorText.visibility = View.GONE
+            binding.titleText.text = getString(R.string.recent_search)
+            binding.removeAll.visibility = View.VISIBLE
+        }
 
         // Init clickable
         clickListener()
@@ -102,6 +117,17 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 binding.search.clearFocus()
+                // Insert in search history
+                query?.let { it ->
+                    if (it.isNotEmpty()) {
+                        val item = Search(it, Date())
+                        var pos: Int
+                        // If query has exist updated
+                        searchList.map { m -> m.query }.also { list -> pos = list.indexOf(it) }
+                        if (pos > -1) searchHistoryAdapter.removeItem(pos, false)
+                        searchHistoryAdapter.insertItem(item)
+                    }
+                }
                 return true
             }
 
@@ -146,10 +172,24 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
         binding.errorText.text = getText(R.string.empty_search)
     }
 
-    private fun nothingInput() {
-        visibilityOnNothingInput()
-        binding.errorText.text = getText(R.string.empty_recent_search)
+    override fun nothingInput() {
+        binding.historyList.visibility = View.VISIBLE
+        val list = appRepository.getAllSearch()
+        searchList.clear()
+        list.forEach { searchList.add(it) }
+
+        if (searchList.isEmpty()) {
+            historyEmpty()
+            binding.errorText.text = getText(R.string.empty_recent_search)
+        } else {
+            historyNotEmpty()
+            binding.titleText.text = getText(R.string.recent_search)
+        }
         searchAdapter.setItem(ArrayList(), null)
+    }
+
+    override fun setQuery(query: String) {
+        binding.search.setQuery(query, false)
     }
 
     private fun visibilityOnFindSomething() {
@@ -157,6 +197,8 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
         binding.descriptionText.visibility = View.VISIBLE
         binding.errorText.visibility = View.INVISIBLE
         binding.searchList.visibility = View.VISIBLE
+        binding.historyList.visibility = View.GONE
+        binding.removeAll.visibility = View.GONE
     }
 
     private fun visibilityOnNothingFind() {
@@ -164,15 +206,32 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
         binding.descriptionText.visibility = View.GONE
         binding.errorText.visibility = View.VISIBLE
         binding.searchList.visibility = View.GONE
+        binding.historyList.visibility = View.GONE
+        binding.removeAll.visibility = View.GONE
     }
 
-    private fun visibilityOnNothingInput() {
+    private fun historyEmpty() {
         binding.titleText.visibility = View.GONE
         binding.descriptionText.visibility = View.GONE
         binding.errorText.visibility = View.VISIBLE
+        binding.removeAll.visibility = View.GONE
+    }
+
+    private fun historyNotEmpty() {
+        binding.titleText.visibility = View.VISIBLE
+        binding.descriptionText.visibility = View.GONE
+        binding.errorText.visibility = View.GONE
+        binding.removeAll.visibility = View.VISIBLE
     }
 
     private fun initRecycler() {
+        searchHistoryAdapter = SearchHistoryAdapter(searchList, appRepository, this)
+        binding.historyList.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            adapter = searchHistoryAdapter
+        }
+
         searchAdapter = SearchAdapter(users, this)
         binding.searchList.apply {
             layoutManager =
@@ -221,6 +280,13 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener {
                 searchAdapter.deselectCheckBoxes()
             }
             initSelectionHeader()
+        }
+
+        // Clear history
+        binding.removeAll.setOnClickListener {
+            historyEmpty()
+            binding.errorText.text = getText(R.string.empty_recent_search)
+            searchHistoryAdapter.removeAll()
         }
     }
 

@@ -15,8 +15,10 @@
     <string name="create_group">Create group</string>
     <string name="add_first">Add a contact first</string>
     <string name="contact_find">Contacts find</string>
+    <string name="recent_search">Recent search</string>
     <string name="empty_recent_search">No recent searches</string>
     <string name="empty_search">No results found</string>
+    <string name="clear_history">Clear history</string>
 
     <string name="jack">Jack</string>
     <string name="blue">Blue</string>

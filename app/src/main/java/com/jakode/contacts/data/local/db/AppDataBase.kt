@@ -4,21 +4,22 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.jakode.contacts.data.local.db.dao.EmailDao
-import com.jakode.contacts.data.local.db.dao.PhoneDao
-import com.jakode.contacts.data.local.db.dao.ProfileDao
-import com.jakode.contacts.data.local.db.dao.UserDao
-import com.jakode.contacts.data.model.Email
-import com.jakode.contacts.data.model.Phone
-import com.jakode.contacts.data.model.Profile
-import com.jakode.contacts.data.model.User
+import androidx.room.TypeConverters
+import com.jakode.contacts.data.local.db.dao.*
+import com.jakode.contacts.data.model.*
+import com.jakode.contacts.utils.Converters
 
-@Database(entities = [User::class, Profile::class, Phone::class, Email::class], version = 1)
+@Database(
+    entities = [User::class, Profile::class, Phone::class, Email::class, Search::class],
+    version = 2
+)
+@TypeConverters(Converters::class)
 abstract class AppDataBase : RoomDatabase() {
     abstract fun userDao(): UserDao // Accesses to user
     abstract fun profileDao(): ProfileDao // Accesses to profile
     abstract fun phoneDao(): PhoneDao // Accesses to phones
     abstract fun emailDao(): EmailDao // Accesses to emails
+    abstract fun searchDao(): SearchDao // // Accesses to search history
 
     companion object {
         @Volatile
