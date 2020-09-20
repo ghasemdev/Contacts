@@ -13,7 +13,7 @@
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/colorPrimaryDark</item>
 
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/background</item>
         <item name="android:windowActivityTransitions">true</item>
 
         <!-- Customize picker mode here. -->
