@@ -379,8 +379,8 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     private fun toolbarItemHidden() {
         binding.toolbar.navigationIcon = null
         binding.toolbar.menu.getItem(0).isVisible = false
-        binding.selection.visibility = View.VISIBLE
-        binding.selectedUsers.visibility = View.GONE
+        binding.selectAll.visibility = View.VISIBLE
+        binding.checkboxText.visibility = View.VISIBLE
 
         // Select all coordinated with body selection
         selectedContacts = contactAdapter.getSelectedContacts()
@@ -396,7 +396,9 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         binding.toolbar.navigationIcon = requireContext().getDrawable(R.drawable.ic_menu)
         binding.toolbar.menu.getItem(0).isVisible = true
         binding.selectAll.isChecked = false
-        binding.selection.visibility = View.GONE
+        binding.selectAll.visibility = View.GONE
+        binding.checkboxText.visibility = View.GONE
+        binding.selectedUsers.visibility = View.GONE
         drawerManager.unlockDrawer()
     }
 

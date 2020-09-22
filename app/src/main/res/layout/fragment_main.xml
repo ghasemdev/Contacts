@@ -46,8 +46,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/selection"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone">
+                    android:layout_height="match_parent">
 
                     <CheckBox
                         android:id="@+id/select_all"
@@ -55,6 +54,7 @@
                         android:layout_height="wrap_content"
                         android:button="@drawable/checkbox"
                         android:buttonTint="@color/icon_color"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toTopOf="@+id/checkbox_text"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -68,6 +68,7 @@
                         android:textAlignment="center"
                         android:textColor="@color/color_primary_text"
                         android:textSize="10sp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="@+id/select_all"
                         app:layout_constraintHorizontal_bias="0.5"
@@ -82,6 +83,7 @@
                         android:layout_marginStart="16dp"
                         android:textColor="@color/icon_color"
                         android:textSize="16sp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="@+id/checkbox_text"
                         app:layout_constraintStart_toEndOf="@+id/select_all"
                         app:layout_constraintTop_toTopOf="@+id/select_all"
