@@ -12,12 +12,11 @@ import com.jakode.contacts.R
 import com.jakode.contacts.data.model.Recent
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
-import com.jakode.contacts.utils.manager.SelectionManager
 import com.jakode.contacts.utils.ButtonBox
 import com.jakode.contacts.utils.manager.ResentUserManager
+import com.jakode.contacts.utils.manager.SelectionManager
 import kotlinx.android.synthetic.main.main_popup_layout.view.*
 import kotlinx.android.synthetic.main.recent_popup_layout.view.*
-import kotlinx.android.synthetic.main.selection_popup_layout.view.*
 import kotlinx.android.synthetic.main.show_user_popup_layout.view.*
 
 object PopupMenu {
@@ -133,16 +132,16 @@ object PopupMenu {
                     ).show()
                 }
 
-                popupView.block.setOnClickListener {
-                    popupWindow.dismiss()
-                    Toast.makeText(view.context, "block user", Toast.LENGTH_SHORT).show()
-                }
+//                popupView.block.setOnClickListener {
+//                    popupWindow.dismiss()
+//                    Toast.makeText(view.context, "block user", Toast.LENGTH_SHORT).show()
+//                }
             }
             Type.SELECTION_MODE_POPUP -> {
-                popupView.create_group.setOnClickListener {
-                    popupWindow.dismiss()
-                    Toast.makeText(view.context, "create group", Toast.LENGTH_SHORT).show()
-                }
+//                popupView.create_group.setOnClickListener {
+//                    popupWindow.dismiss()
+//                    Toast.makeText(view.context, "create group", Toast.LENGTH_SHORT).show()
+//                }
             }
         }
     }

@@ -85,9 +85,9 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         (activity as AppCompatActivity?)!!.setSupportActionBar(binding.toolbar)
         setHasOptionsMenu(true)
         // Set action for menu icon
-        binding.toolbar.setNavigationOnClickListener {
-            drawerManager.openDrawer()
-        }
+//        binding.toolbar.setNavigationOnClickListener {
+//            drawerManager.openDrawer()
+//        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -227,16 +227,16 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
     private fun clickListener() {
         // Cover click listener
-        binding.toolbarHeader.myCover.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToAdminFragment()
-            findNavController().navigate(action)
-        }
+//        binding.toolbarHeader.myCover.setOnClickListener {
+//            val action = MainFragmentDirections.actionMainFragmentToAdminFragment()
+//            findNavController().navigate(action)
+//        }
 
         // Recent click listener
-        binding.toolbarHeader.viewAll.setOnClickListener {
-            val action = MainFragmentDirections.actionMainFragmentToRecentFragment()
-            findNavController().navigate(action)
-        }
+//        binding.toolbarHeader.viewAll.setOnClickListener {
+//            val action = MainFragmentDirections.actionMainFragmentToRecentFragment()
+//            findNavController().navigate(action)
+//        }
 
         // Fab button click listener
         binding.fabButton.setOnClickListener {
