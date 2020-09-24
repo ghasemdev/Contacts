@@ -1,4 +1,4 @@
-package com.jakode.contacts.utils;
+package com.jakode.contacts.utils.date;
 
 import android.annotation.SuppressLint;
 

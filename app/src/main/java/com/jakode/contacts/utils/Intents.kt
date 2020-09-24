@@ -5,9 +5,14 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.CalendarContract
+import com.jakode.contacts.data.model.Recent
 import com.jakode.contacts.data.model.UserInfo
+import com.jakode.contacts.data.repository.AppRepository
+import java.util.*
 
 object Intents {
+    private lateinit var appRepository: AppRepository
+
     // Add event to calender
     fun addEvent(
         context: Context,
@@ -53,14 +58,20 @@ object Intents {
     }
 
     // Dial phone
-    fun dialPhoneNumber(context: Context, phoneNumber: String) {
+    fun dialPhoneNumber(context: Context, phoneNumber: String, userId: Long) {
+        initRepository(context)
+        appRepository.insertRecent(Recent(userId, Date()))
+
         Intent(Intent.ACTION_DIAL).apply {
             data = Uri.parse("tel:$phoneNumber")
         }.also { context.startActivity(it) }
     }
 
     // Send message
-    fun composeSmsMessage(context: Context, phoneNumber: String) {
+    fun composeSmsMessage(context: Context, phoneNumber: String, userId: Long) {
+        initRepository(context)
+        appRepository.insertRecent(Recent(userId, Date()))
+
         Intent(Intent.ACTION_SENDTO).apply {
             data = Uri.parse("smsto:$phoneNumber")  // This ensures only SMS apps respond
             putExtra("sms_body", "")
@@ -121,5 +132,10 @@ object Intents {
             type = "text/plain"
             putExtra(Intent.EXTRA_TEXT, text)
         }.also { context.startActivity(Intent.createChooser(it, null)) }
+    }
+
+    private fun initRepository(context: Context) {
+        // Init repository
+        appRepository = AppRepository(context)
     }
 }

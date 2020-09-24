@@ -332,10 +332,12 @@ class SearchFragment : Fragment(), SelectionManager, OnBackPressedListener, Sear
                 PopupMenu.show(
                     PopupMenu.Type.SELECTION_MODE_POPUP,
                     userInfo = null,
+                    userRecent = null,
                     anchor,
                     x,
                     y,
                     selectionManager = null,
+                    resentUserManager = null,
                     buttonBox = null
                 )
                 true

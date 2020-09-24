@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.jakode.contacts.R
 import com.jakode.contacts.adapter.model.Item
+import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.utils.Intents
 import kotlinx.android.synthetic.main.input_phone_list_item.view.*
 import kotlinx.android.synthetic.main.show_phone_list_item.view.*
@@ -28,6 +29,7 @@ class PhoneAdapter(
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     private lateinit var context: Context
+    private lateinit var appRepository: AppRepository
     private var perViewHolder: InputHolder? = null
     private var error = false
 
@@ -95,18 +97,21 @@ class PhoneAdapter(
         }
 
         override fun onClick(view: View?) {
+            appRepository = AppRepository(context)
+            val userId = appRepository.findUserByPhone(phone.text.toString())[0].user.id
+
             when (view?.id) {
                 R.id.call_icon -> {
-                    Intents.dialPhoneNumber(context, phone.text.toString())
+                    Intents.dialPhoneNumber(context, phone.text.toString(), userId)
                 }
                 R.id.massage_icon -> {
-                    Intents.composeSmsMessage(context, phone.text.toString())
+                    Intents.composeSmsMessage(context, phone.text.toString(), userId)
                 }
                 R.id.duo_icon -> {
                     Intents.dialGoogleDuo(context, phone.text.toString())
                 }
                 else -> {
-                    Intents.dialPhoneNumber(context, phone.text.toString())
+                    Intents.dialPhoneNumber(context, phone.text.toString(), userId)
                 }
             }
         }

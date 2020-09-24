@@ -20,6 +20,14 @@
     <string name="empty_recent_search">جست و جوی اخیر وجود ندارد</string>
     <string name="empty_search">نتیجه ای یافت نشد</string>
     <string name="clear_history">پاک کردن تاریخچه جستجو</string>
+    <string name="sec_ago">ثانیه قبل</string>
+    <string name="mins_ago">دقیقه قبل</string>
+    <string name="hour_ago">ساعت قبل</string>
+    <string name="day_ago">روز قبل</string>
+    <string name="month_ago">ماه قبل</string>
+    <string name="year_ago">سال قبل</string>
+    <string name="clear">پاک کردن از لیست اخیرا</string>
+    <string name="clear_all">پاک کردن همه</string>
 
     <!--Add User Fragment-->
     <string name="name">نام</string>

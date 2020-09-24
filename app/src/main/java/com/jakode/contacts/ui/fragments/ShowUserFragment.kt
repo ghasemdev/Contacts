@@ -14,7 +14,7 @@ import com.jakode.contacts.adapter.PhoneAdapter
 import com.jakode.contacts.adapter.model.Item
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.databinding.FragmentShowUserBinding
-import com.jakode.contacts.utils.DateConverter
+import com.jakode.contacts.utils.date.DateConverter
 import com.jakode.contacts.utils.ImageUtil
 import com.jakode.contacts.utils.Intents
 import com.jakode.contacts.utils.dialog.BottomSheet
@@ -92,10 +92,10 @@ class ShowUserFragment : Fragment() {
 
     private fun headerOnClick() {
         binding.callIcon.setOnClickListener {
-            Intents.dialPhoneNumber(requireContext(), userInfo.phones[0])
+            Intents.dialPhoneNumber(requireContext(), userInfo.phones[0], userInfo.user.id)
         }
         binding.massageIcon.setOnClickListener {
-            Intents.composeSmsMessage(requireContext(), userInfo.phones[0])
+            Intents.composeSmsMessage(requireContext(), userInfo.phones[0], userInfo.user.id)
         }
         binding.duoIcon.setOnClickListener {
             Intents.dialGoogleDuo(requireContext(), userInfo.phones[0])
@@ -259,9 +259,11 @@ class ShowUserFragment : Fragment() {
                 PopupMenu.show(
                     PopupMenu.Type.SHOW_USER_POPUP,
                     userInfo,
+                    userRecent = null,
                     anchor,
                     x, y,
                     selectionManager = null,
+                    resentUserManager = null,
                     buttonBox = null
                 )
                 true

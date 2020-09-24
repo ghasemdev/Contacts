@@ -9,10 +9,14 @@ import android.widget.LinearLayout
 import android.widget.PopupWindow
 import android.widget.Toast
 import com.jakode.contacts.R
+import com.jakode.contacts.data.model.Recent
 import com.jakode.contacts.data.model.UserInfo
+import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.utils.manager.SelectionManager
 import com.jakode.contacts.utils.ButtonBox
+import com.jakode.contacts.utils.manager.ResentUserManager
 import kotlinx.android.synthetic.main.main_popup_layout.view.*
+import kotlinx.android.synthetic.main.recent_popup_layout.view.*
 import kotlinx.android.synthetic.main.selection_popup_layout.view.*
 import kotlinx.android.synthetic.main.show_user_popup_layout.view.*
 
@@ -21,11 +25,13 @@ object PopupMenu {
     private lateinit var view: View
 
     private var userInfo: UserInfo? = null
+    private var userRecent: Recent? = null
     private var selectionManager: SelectionManager? = null
+    private var resentUserManager: ResentUserManager? = null
     private var buttonBox: ButtonBox? = null
 
     enum class Type {
-        MAIN_POPUP, SELECTION_MODE_POPUP, SHOW_USER_POPUP
+        MAIN_POPUP, RECENT_POPUP, SELECTION_MODE_POPUP, SHOW_USER_POPUP
     }
 
     // PopupWindow display method
@@ -33,20 +39,23 @@ object PopupMenu {
     fun show(
         type: Type,
         userInfo: UserInfo?,
+        userRecent: Recent?,
         view: View,
         x: Int,
         y: Int,
         selectionManager: SelectionManager?,
+        resentUserManager: ResentUserManager?,
         buttonBox: ButtonBox?
     ) {
         // Initialize
-        initialize(type, userInfo, view, selectionManager, buttonBox)
+        initialize(type, userInfo, userRecent, view, selectionManager, resentUserManager, buttonBox)
 
         // Create a View object yourself through inflater
         val inflater =
             view.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
         val popupView: View = when (type) {
             Type.MAIN_POPUP -> inflater.inflate(R.layout.main_popup_layout, null)
+            Type.RECENT_POPUP -> inflater.inflate(R.layout.recent_popup_layout, null)
             Type.SHOW_USER_POPUP -> inflater.inflate(R.layout.show_user_popup_layout, null)
             Type.SELECTION_MODE_POPUP -> inflater.inflate(R.layout.selection_popup_layout, null)
         }
@@ -78,18 +87,39 @@ object PopupMenu {
                         selectionManager!!.onContactAction(true)
                         buttonBox!!.hideShareButton()
                     } else {
-                        Toast.makeText(view.context, view.context.getString(R.string.add_first), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            view.context,
+                            view.context.getString(R.string.add_first),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
 
                 popupView.share.setOnClickListener {
                     popupWindow.dismiss()
-                    if (selectionManager!!.getItemCount()  != 0) {
+                    if (selectionManager!!.getItemCount() != 0) {
                         selectionManager!!.onContactAction(true)
                         buttonBox!!.hideDeleteButton()
                     } else {
-                        Toast.makeText(view.context, view.context.getString(R.string.add_first), Toast.LENGTH_SHORT).show()
+                        Toast.makeText(
+                            view.context,
+                            view.context.getString(R.string.add_first),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
+                }
+            }
+            Type.RECENT_POPUP -> {
+                popupView.clear.setOnClickListener {
+                    popupWindow.dismiss()
+                    resentUserManager!!.remove(resentUserManager!!.pos)
+                    AppRepository(view.context).deleteRecent(userRecent!!)
+                }
+
+                popupView.clear_all.setOnClickListener {
+                    popupWindow.dismiss()
+                    resentUserManager!!.removeAll()
+                    AppRepository(view.context).deleteAllRecent()
                 }
             }
             Type.SHOW_USER_POPUP -> {
@@ -120,14 +150,18 @@ object PopupMenu {
     private fun initialize(
         type: Type,
         userInfo: UserInfo?,
+        userRecent: Recent?,
         view: View,
         selectionManager: SelectionManager?,
+        resentUserManager: ResentUserManager?,
         buttonBox: ButtonBox?
     ) {
         this.type = type
         this.userInfo = userInfo
+        this.userRecent = userRecent
         this.view = view
         this.selectionManager = selectionManager
+        this.resentUserManager = resentUserManager
         this.buttonBox = buttonBox
     }
 }

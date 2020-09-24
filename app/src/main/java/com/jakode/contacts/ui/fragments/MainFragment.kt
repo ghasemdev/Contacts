@@ -20,10 +20,14 @@ import com.google.android.material.appbar.AppBarLayout
 import com.jakode.contacts.R
 import com.jakode.contacts.adapter.ContactAdapter
 import com.jakode.contacts.adapter.RecentAdapter
+import com.jakode.contacts.data.model.Recent
 import com.jakode.contacts.data.model.UserInfo
 import com.jakode.contacts.data.repository.AppRepository
 import com.jakode.contacts.databinding.FragmentMainBinding
-import com.jakode.contacts.utils.*
+import com.jakode.contacts.utils.AppBarStateChangeListener
+import com.jakode.contacts.utils.ButtonBox
+import com.jakode.contacts.utils.ImageSetter
+import com.jakode.contacts.utils.Intents
 import com.jakode.contacts.utils.dialog.BottomSheet
 import com.jakode.contacts.utils.dialog.PopupMenu
 import com.jakode.contacts.utils.manager.DrawerManager
@@ -42,6 +46,7 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     private var requireAnimOut = true
 
     private var users = ArrayList<UserInfo>()
+    private var recentUsers = ArrayList<Recent>()
     private lateinit var selectedContacts: List<UserInfo>
 
     override fun onAttach(context: Context) {
@@ -96,6 +101,11 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         // Init list of users
         users = appRepository.getAllUsers()
         if (users.isEmpty()) binding.emptyAlarm.visibility = View.VISIBLE
+        // Init list of recent user
+        val list = appRepository.getAllRecent()
+        recentUsers.clear()
+        list.forEach { recentUsers.add(it) }
+        if (list.isEmpty()) hideRecent() else showRecent()
 
         // Init cover
         ImageSetter.set(
@@ -113,12 +123,27 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
         buttonBox = ButtonBox(binding.delete, binding.deleteIcon, binding.share, binding.shareIcon)
     }
 
+    // Update recent list when start search activity
+    override fun onResume() {
+        super.onResume()
+        // Init list of recent user
+        val list = appRepository.getAllRecent()
+        recentUsers.clear()
+        list.forEach { recentUsers.add(it) }
+        if (list.isEmpty()) hideRecent() else showRecent()
+    }
+
     private fun initRecycler() {
         // Recent list
         binding.toolbarHeader.recentList.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-            adapter = RecentAdapter(Data.recentUsers())
+            adapter = RecentAdapter(
+                recentUsers,
+                binding.toolbarHeader.recent,
+                binding.toolbarHeader.viewAll,
+                binding.toolbarHeader.recentList
+            )
         }
 
         // Contact list
@@ -152,14 +177,16 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
+            val userId = users[position].user.id
+
             when (direction) {
                 ItemTouchHelper.RIGHT -> {
                     contactAdapter.notifyDataSetChanged()
-                    Intents.dialPhoneNumber(requireContext(), users[position].phones[0])
+                    Intents.dialPhoneNumber(requireContext(), users[position].phones[0], userId)
                 }
                 ItemTouchHelper.LEFT -> {
                     contactAdapter.notifyDataSetChanged()
-                    Intents.composeSmsMessage(requireContext(), users[position].phones[0])
+                    Intents.composeSmsMessage(requireContext(), users[position].phones[0], userId)
                 }
             }
         }
@@ -303,20 +330,24 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
                     PopupMenu.show(
                         PopupMenu.Type.SELECTION_MODE_POPUP,
                         userInfo = null,
+                        userRecent = null,
                         anchor,
                         x = 0,
                         y = -125,
                         selectionManager = null,
+                        resentUserManager = null,
                         buttonBox = null
                     )
                 } else {
                     PopupMenu.show(
                         PopupMenu.Type.MAIN_POPUP,
                         userInfo = null,
+                        userRecent = null,
                         anchor,
                         x = 0,
                         y = -125,
                         this,
+                        resentUserManager = null,
                         buttonBox
                     )
                 }
@@ -424,6 +455,18 @@ class MainFragment : Fragment(), SelectionManager, View.OnKeyListener {
     private fun selectionHeaderHidden() {
         binding.toolbarHeader.root.visibility = View.VISIBLE
         binding.toolbarHeaderSelection.root.visibility = View.INVISIBLE
+    }
+
+    private fun hideRecent() {
+        binding.toolbarHeader.recent.visibility = View.GONE
+        binding.toolbarHeader.viewAll.visibility = View.GONE
+        binding.toolbarHeader.recentList.visibility = View.GONE
+    }
+
+    private fun showRecent() {
+        binding.toolbarHeader.recent.visibility = View.VISIBLE
+        binding.toolbarHeader.viewAll.visibility = View.VISIBLE
+        binding.toolbarHeader.recentList.visibility = View.VISIBLE
     }
 
     private fun fabHidden() {

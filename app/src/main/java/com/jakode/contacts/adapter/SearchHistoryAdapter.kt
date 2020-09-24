@@ -51,7 +51,7 @@ class SearchHistoryAdapter(
     }
 
     fun removeItem(position: Int, flag: Boolean = true) {
-        appRepository.deleteRowSearch(list[position])
+        appRepository.deleteSearch(list[position])
 
         list.removeAt(position)
         notifyItemRemoved(position)

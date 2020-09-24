@@ -11,6 +11,7 @@ class AppRepository(context: Context) {
     private var phoneDao: PhoneDao
     private var emailDao: EmailDao
     private var searchDao: SearchDao
+    private var recentDao: RecentDao
 
     init {
         val db = AppDataBase.getInstance(context)
@@ -19,6 +20,7 @@ class AppRepository(context: Context) {
         phoneDao = db.phoneDao()
         emailDao = db.emailDao()
         searchDao = db.searchDao()
+        recentDao = db.recentDao()
     }
 
     fun insertUser(user: UserInfo): Long {
@@ -166,14 +168,36 @@ class AppRepository(context: Context) {
 
     fun insertSearch(search: Search) {
         searchDao.getByQuery(search.query)?.let {
-            deleteRowSearch(it)
+            deleteSearch(it)
         }
         searchDao.insert(search)
     }
 
-    fun deleteRowSearch(search: Search) = searchDao.delete(search)
+    fun deleteSearch(search: Search) = searchDao.delete(search)
     fun deleteAllSearch() = searchDao.deleteAll()
     fun getAllSearch() = searchDao.getAllSearch().reversed()
+
+    fun insertRecent(recent: Recent) {
+        recentDao.getByUser(recent.userId.toString())?.let {
+            deleteRecent(it)
+        }
+        recentDao.insert(recent)
+    }
+
+    fun deleteRecent(recent: Recent) = recentDao.delete(recent)
+    fun deleteAllRecent() = recentDao.deleteAll()
+    fun getAllRecent() = recentDao.getAllRecent().reversed()
+
+    fun findUser(id: String): UserInfo {
+        val userAndProfile = findUserById(id)
+        val phones = findUserWithPhonesById(id).phones
+        val emails = findUserWithEmailsById(id).emails
+        return UserInfo(
+            userAndProfile.user,
+            userAndProfile.profile,
+            phones.map { it.number },
+            emails.map { it.email })
+    }
 
     fun findUsersByBlock(boolean: Boolean): List<UserAndProfile> {
         return when (boolean) {

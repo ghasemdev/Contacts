@@ -65,7 +65,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recent_more"
-                    tools:text="@string/jack" />
+                    tools:text="Jack" />
 
                 <TextView
                     android:id="@+id/recent_last_name"
@@ -77,7 +77,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recent_first_name"
-                    tools:text="@string/blue" />
+                    tools:text="Blue" />
 
                 <TextView
                     android:id="@+id/recent_time"
@@ -88,7 +88,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recent_last_name"
-                    tools:text="@string/_12_mins_ago" />
+                    tools:text="12 mins ago" />
 
                 <ImageView
                     android:id="@+id/recent_call"
